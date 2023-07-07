@@ -46,7 +46,9 @@ html {
 body {
   margin: 0;
 }
-
+.margin-top-page {
+  padding-top: 100px;
+}
 .route-enter-from {
   opacity: 0;
   transform: translateY(-30px);

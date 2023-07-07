@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="margin-top-page">
     <base-dialog :show="!!error" title="An error occurred!" @close="handleError">
       <p>{{ error }}</p>
     </base-dialog>

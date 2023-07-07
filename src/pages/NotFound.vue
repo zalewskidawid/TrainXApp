@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="margin-top-page">
     <base-card>
       <h2>Page not found</h2>
       <p>

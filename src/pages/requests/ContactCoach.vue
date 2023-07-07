@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="submitForm">
+  <form @submit.prevent="submitForm" class="margin-top-page">
     <div class="form-control">
       <label for="email">Your E-Mail</label>
       <input type="email" id="email" v-model.trim="email" />
