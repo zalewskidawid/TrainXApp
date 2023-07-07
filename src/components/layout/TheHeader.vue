@@ -8,6 +8,9 @@
         <li>
           <router-link to="/coaches">All Coaches</router-link>
         </li>
+        <li>
+          <router-link to="/plans">Plans</router-link>
+        </li>
         <li v-if="isLoggedIn">
           <router-link to="/requests">Requests</router-link>
         </li>

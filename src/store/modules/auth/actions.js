@@ -31,8 +31,13 @@ export default {
             })
         });
         const responseData = await response.json();
+        if (!response.ok) {
+            const error = new Error(
+                responseData.message || 'Failed to Login. Check your login data.'
+            );
+            throw error;
+        }
         if (mode === 'signup') {
-            const responseData = await response.json();
             const userId = responseData.localId;
             if (userType === 'client') {
                 url2 = `https://trainx-app-default-rtdb.europe-west1.firebasedatabase.app/clients/${userId}.json`;
@@ -51,7 +56,6 @@ export default {
                     rate: payload.rate,
                 })
             });
-
             if (!response.ok || !responseAddToDatabase.ok) {
                 const error = new Error(
                     responseData.message || 'Failed to authenticate. Check your login data.' || responseAddToDatabase.message
