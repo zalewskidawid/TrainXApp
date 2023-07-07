@@ -30,11 +30,12 @@ export default {
       try {
         if(data.mode === 'login') {
           await this.$store.dispatch('login', data);
+          const redirectUrl = '/' + (this.$route.query.redirect || 'coaches');
+          this.$router.replace(redirectUrl);
         } else {
           await this.$store.dispatch('signup', data);
+          window.location.reload()
         }
-        const redirectUrl = '/' + (this.$route.query.redirect || 'coaches');
-        this.$router.replace(redirectUrl);
       } catch (err) {
         this.isLoading = false;
         this.error = err.message || 'Failed to authenticate, try later.';

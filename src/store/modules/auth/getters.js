@@ -2,6 +2,9 @@ export default {
   userId(state) {
     return state.userId;
   },
+  userEmail(state) {
+    return state.email
+  },
   token(state) {
     return state.token;
   },

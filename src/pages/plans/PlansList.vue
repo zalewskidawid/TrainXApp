@@ -5,6 +5,16 @@
     </base-dialog>
     <section>
       <base-card>
+        <div class="filter-plans-container">
+          <label>
+            <input type="checkbox" v-model="myPlansChecked">
+            Moje plany
+          </label>
+          <label>
+            <input type="checkbox" v-model="allPlansChecked">
+            Wszystkie plany
+          </label>
+        </div>
         <base-button mode="outline" @click="loadAllPlans(true)">Refresh</base-button>
         <base-button link to="plans/createPlan">Create Plan</base-button>
       </base-card>
@@ -12,10 +22,10 @@
    <section>
      <base-card>
        <base-spinner v-if="isLoading"></base-spinner>
-       <ul v-else-if="!isLoading && hasPlans">
-       <plan-item v-for="plan in getAllPlans" :key="plan.id" :id="plan.id" :plan-name="plan.planTitle" :plan-description="plan.planDescription"></plan-item>
+       <ul v-else-if="!isLoading && hasPlans && filteredPlans.length > 0">
+       <plan-item v-for="plan in filteredPlans" :key="plan.id" :id="plan.id" :plan-name="plan.planTitle" :plan-description="plan.planDescription"></plan-item>
        </ul>
-       <h3 v-else>Doesn't have any plans yet.</h3>
+       <h3 v-else-if="filteredPlans.length === 0">Nie masz żadnych planów.</h3>
      </base-card>
    </section>
   </div>
@@ -33,22 +43,45 @@ export default {
     return {
       error:null,
       isLoading: false,
+      myPlansChecked: false,
+      allPlansChecked: false
+    }
+  },
+  watch: {
+    myPlansChecked(newVal) {
+      if (newVal) {
+        this.allPlansChecked = false;
+      }
+    },
+    allPlansChecked(newVal) {
+      if(newVal) {
+        this.myPlansChecked = false;
+      }
     }
   },
   computed: {
-    getAllPlans() {
-      return this.$store.getters['plans/plans'];
-    },
     hasPlans() {
       return this.$store.getters['plans/hasPlans'];
+    },
+    filteredPlans() {
+      const plans = this.$store.getters['plans/plans'];
+
+      if (this.myPlansChecked) {
+        return plans.filter(plan => plan.planRecipientEmail === this.$store.getters['userEmail'] || plan.planCreator === localStorage.getItem('userId'));
+      } else if (this.allPlansChecked) {
+        return plans;
+      } else {
+        return [];
+      }
     }
   },
   created() {
-    if(this.$store.getters['plans/hasPlans']) {
+    if (this.$store.getters['plans/hasPlans']) {
       this.loadAllPlans(false)
     } else {
       this.loadAllPlans(true);
     }
+    this.allPlansChecked = true;
   },
   methods: {
     async loadAllPlans(refresh) {
@@ -68,7 +101,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.filter-plans-container {
+  margin-bottom: 16px;
+  input {
+    cursor: pointer;
+  }
+}
 ul {
   margin: 0;
   padding: 0;

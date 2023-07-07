@@ -1,27 +1,58 @@
 let timer;
 export default {
     async login(context, payload) {
-        return context.dispatch('auth', {
+        return context.dispatch('authLogin', {
             ...payload,
             mode: 'login'
         });
     },
     async signup(context, payload) {
-        return context.dispatch('auth', {
+        return context.dispatch('authSignUp', {
             ...payload,
             mode: 'signup',
         });
     },
-    async auth(context, payload) {
-        const mode = payload.mode;
+    async authSignUp(context,payload) {
         const userType = payload.userType;
-        let url2 = '';
+        let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC7sDufCs5on6nIJG3GGOPi9MZrtlVBp2E';
+        let url2;
+        const response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                email: payload.email,
+                password: payload.password,
+                returnSecureToken: true
+            })
+        });
+        const responseData = await response.json();
+        const userId = responseData.localId;
+        if (userType === 'client') {
+            url2 = `https://trainx-app-default-rtdb.europe-west1.firebasedatabase.app/clients/${userId}.json`;
+        } else {
+            url2 = `https://trainx-app-default-rtdb.europe-west1.firebasedatabase.app/trainers/${userId}.json`;
+        }
+        const responseAddToDatabase = await fetch(url2, {
+            method: 'PUT',
+            body: JSON.stringify({
+                email: payload.email,
+                userType: userType,
+                userId: userId,
+                firstName: payload.first,
+                lastName: payload.last,
+                description: payload.desc,
+                rate: payload.rate,
+            })
+        });
+        if (!response.ok || !responseAddToDatabase.ok) {
+            const error = new Error(
+                responseData.message || 'Failed to authenticate. Check your login data.' || responseAddToDatabase.message
+            );
+            throw error;
+        }
+    },
+    async authLogin(context, payload) {
         let url =
             'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC7sDufCs5on6nIJG3GGOPi9MZrtlVBp2E';
-        if (mode === 'signup') {
-            url =
-                'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC7sDufCs5on6nIJG3GGOPi9MZrtlVBp2E';
-        }
         const response = await fetch(url, {
             method: 'POST',
             body: JSON.stringify({
@@ -37,33 +68,6 @@ export default {
             );
             throw error;
         }
-        if (mode === 'signup') {
-            const userId = responseData.localId;
-            if (userType === 'client') {
-                url2 = `https://trainx-app-default-rtdb.europe-west1.firebasedatabase.app/clients/${userId}.json`;
-            } else {
-                url2 = `https://trainx-app-default-rtdb.europe-west1.firebasedatabase.app/trainers/${userId}.json`;
-            }
-            const responseAddToDatabase = await fetch(url2, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    email: payload.email,
-                    userType: userType,
-                    userId: userId,
-                    firstName: payload.first,
-                    lastName: payload.last,
-                    description: payload.desc,
-                    rate: payload.rate,
-                })
-            });
-            if (!response.ok || !responseAddToDatabase.ok) {
-                const error = new Error(
-                    responseData.message || 'Failed to authenticate. Check your login data.' || responseAddToDatabase.message
-                );
-                throw error;
-            }
-        }
-
         const expiresIn = +responseData.expiresIn * 1000;
         // const expiresIn = 5000;
         const expirationDate = new Date().getTime() + expiresIn;
@@ -71,6 +75,7 @@ export default {
         localStorage.setItem('token', responseData.idToken);
         localStorage.setItem('userId', responseData.localId);
         localStorage.setItem('tokenExpiration', expirationDate);
+        localStorage.setItem('userEmail', responseData.email);
 
         timer = setTimeout(function () {
             context.dispatch('autoLogout');
@@ -78,14 +83,15 @@ export default {
 
         context.commit('setUser', {
             token: responseData.idToken,
-            userId: responseData.localId
+            userId: responseData.localId,
+            email: responseData.email
         });
     },
     tryLogin(context) {
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId');
         const tokenExpiration = localStorage.getItem('tokenExpiration');
-
+        const userEmail = localStorage.getItem('userEmail');
         const expiresIn = +tokenExpiration - new Date().getTime();
 
         if (expiresIn < 0) {
@@ -99,7 +105,8 @@ export default {
         if (token && userId) {
             context.commit('setUser', {
                 token: token,
-                userId: userId
+                userId: userId,
+                email: userEmail
             });
         }
     },
@@ -107,12 +114,14 @@ export default {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
         localStorage.removeItem('tokenExpiration');
+        localStorage.removeItem('userEmail')
 
         clearTimeout(timer);
 
         context.commit('setUser', {
             token: null,
-            userId: null
+            userId: null,
+            email: null
         });
     },
     autoLogout(context) {

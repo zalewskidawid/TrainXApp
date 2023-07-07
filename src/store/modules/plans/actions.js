@@ -7,6 +7,7 @@ export default {
            planDescription: payload.planDescription,
            planRecipient: payload.planRecipient,
            planRecipientEmail: payload.planRecipientEmail,
+           planCreator: payload.planCreator,
            childPlans: payload.childPlans
        }
         const response = await fetch(url, {
@@ -42,7 +43,9 @@ export default {
                 planTitle: responseData[key].planTitle,
                 planDescription: responseData[key].planDescription,
                 planRecipient: responseData[key].planRecipient,
-                childPlans: responseData[key].childPlans
+                childPlans: responseData[key].childPlans,
+                planRecipientEmail: responseData[key].planRecipientEmail,
+                planCreator: responseData[key].planCreator
             };
                 plans.push(plan);
         }

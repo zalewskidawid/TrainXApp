@@ -1,24 +1,24 @@
 <template>
   <header>
     <nav>
-      <h1>
-        <router-link to="/">Find a Coach</router-link>
-      </h1>
+      <h2 class="header-home">
+        <router-link to="/">Train<span>X</span>App</router-link>
+      </h2>
       <ul>
         <li>
-          <router-link to="/coaches">All Coaches</router-link>
+          <router-link to="/coaches">Trenerzy</router-link>
         </li>
         <li>
-          <router-link to="/plans">Plans</router-link>
+          <router-link to="/plans">Plany</router-link>
         </li>
         <li v-if="isLoggedIn">
-          <router-link to="/requests">Requests</router-link>
+          <router-link to="/requests">Wiadomości</router-link>
         </li>
         <li v-else>
-          <router-link to="/auth">Login</router-link>
+          <router-link to="/auth">Logowanie</router-link>
         </li>
         <li v-if="isLoggedIn">
-          <base-button @click="logout">Logout</base-button>
+          <base-button @click="logout">Wyloguj się</base-button>
         </li>
       </ul>
     </nav>
@@ -41,47 +41,60 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/variables.scss";
 header {
   width: 100%;
-  height: 5rem;
-  background-color: #3d008d;
+  height: 70px;
+  background-color: rgba(0,0,0,0.7);
   display: flex;
   justify-content: center;
   align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
 }
 
 header a {
   text-decoration: none;
-  color: #f391e3;
+  color: $primary-color;
   display: inline-block;
-  padding: 0.75rem 1.5rem;
+  padding: 16px 32px;
   border: 1px solid transparent;
+  &:hover {
+    color: $primary-color-darker;
+  }
 }
 
 a:active,
 a:hover,
 a.router-link-active {
-  border: 1px solid #f391e3;
+  border: 1px solid $primary-color-darker;
+  color: $primary-color-darker;
 }
 
-h1 {
+.header-home {
   margin: 0;
 }
 
-h1 a {
+.header-home a {
   color: white;
   margin: 0;
+  span {
+    color: $primary-color;
+  }
 }
 
-h1 a:hover,
-h1 a:active,
-h1 a.router-link-active {
+.header-home a:hover,
+.header-home a:active,
+.header-home a.router-link-active {
   border-color: transparent;
 }
 
 header nav {
-  width: 90%;
+  width: 100%;
   margin: auto;
   display: flex;
   justify-content: space-between;

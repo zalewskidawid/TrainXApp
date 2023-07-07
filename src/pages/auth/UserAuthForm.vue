@@ -22,7 +22,7 @@
         <p v-if="!firstName.isValid">Imię nie może być puste.</p>
       </div>
       <div class="form-control" :class="{invalid: !lastName.isValid}">
-        <label for="lastname">Lastname</label>
+        <label for="lastname">Nazwisko</label>
         <input
             type="text"
             id="lastname"
@@ -41,11 +41,6 @@
         ></textarea>
         <p v-if="!description.isValid">Opis nie może być pusty.</p>
       </div>
-      <div class="form-control" :class="{invalid: !rate.isValid}">
-        <label for="rate">Hourly Rate</label>
-        <input type="number" id="rate" v-model.number="rate.val" @blur="clearValidity('rate')"/>
-        <p v-if="!rate.isValid">Wartość musi być większa od 0.</p>
-      </div>
       <div class="form-control" :class="{invalid: !userType.isValid}" v-if="mode === 'signup'">
         <div class="radio-btn-container">
           <input name="userType" type="radio" v-model="userType.val" value="client" class="register-radio-btn"
@@ -56,6 +51,11 @@
                  class="register-radio-btn" @blur="clearValidity('userType')"><span>Trener</span>
         </div>
         <p v-if="!userType.isValid">Musi być wybrana wartość</p>
+      </div>
+      <div v-if="userType.val !== '' && userType.val === 'trainer'" class="form-control" :class="{invalid: !rate.isValid}">
+        <label for="rate">Hourly Rate</label>
+        <input type="number" id="rate" v-model.number="rate.val" @blur="clearValidity('rate')"/>
+        <p v-if="!rate.isValid">Wartość musi być większa od 0.</p>
       </div>
     </div>
     <div class="form-login-wrapper" v-else>
@@ -133,8 +133,13 @@ export default {
           this.formIsValid = false;
         }
         if (!this.rate.val || this.rate.val < 0) {
-          this.rate.isValid = false;
-          this.formIsValid = false;
+          if(this.userType.val === 'trainer') {
+            this.rate.isValid = false;
+            this.formIsValid = false;
+          } else {
+            this.rate.isValid = true;
+            this.formIsValid = true;
+          }
         }
         if (this.userType.val === '') {
           this.userType.isValid = false;
@@ -203,9 +208,9 @@ export default {
     },
     switchModeButtonCaption() {
       if (this.mode === 'login') {
-        return 'Otworz rejestracje';
+        return 'Rejestracja';
       } else {
-        return 'Otworz logowanie';
+        return 'Logowanie';
       }
     },
   },

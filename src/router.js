@@ -7,6 +7,7 @@ import store from './store/index.js';
 import PlansList from "@/pages/plans/PlansList";
 import createPlan from "@/pages/plans/CreatePlan";
 import PlanDetails from "@/pages/plans/PlanDetails";
+import HomePage from "@/pages/homePage/HomePage";
 
 const CoachDetail = defineAsyncComponent(() => import('./pages/coaches/CoachDetail.vue'));
 const ContactCoach = defineAsyncComponent(() => import('./pages/requests/ContactCoach.vue'));
@@ -17,7 +18,7 @@ const UserAuth = defineAsyncComponent(() => import('./pages/auth/UserAuth.vue'))
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        {path: '/', redirect: '/coaches'},
+        {path: '/', component: HomePage},
         {path: '/coaches', component: CoachesList},
         {
             path: '/coaches/:id',
