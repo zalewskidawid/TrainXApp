@@ -6,6 +6,7 @@
       <p class="main-banner-subtitle">Twoje miejsce na spersonalizowany trening i zdrowy styl życia</p>
       <a href="/auth"><div class="cta-button">Rozpocznij już dziś</div></a>
     </div>
+    <img :src="require('@/assets/images/homepage-banner-img.png')" alt="homepage-banner-img" class="main-banner-container__img">
   </div>
 </section>
 </template>
@@ -21,18 +22,17 @@ export default {}
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   flex-direction: row;
   flex-wrap: wrap;
-  background-image: url("@/assets/images/home-banner-img.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: transparent;
   .main-banner-container {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     height: auto;
     padding: 0 32px;
+    width: 100%;
     .main-banner-text {
       height: 100%;
       h1 {
@@ -51,7 +51,9 @@ export default {}
       }
     }
     a {
+      display: block;
       text-decoration: none;
+      width: fit-content;
       .cta-button {
         background-color: transparent;
         padding: 16px;
@@ -60,13 +62,16 @@ export default {}
         margin-top: 16px;
         width: fit-content;
         transition: all .3s ease-in;
+        border-radius: 25px;
       }
       &:hover {
         .cta-button {
-          color: $primary-color-darker;
-          border-color: $primary-color-darker;
+          border-color: $primary-color;
         }
       }
+    }
+    &__img {
+      max-width: 300px;
     }
   }
 }

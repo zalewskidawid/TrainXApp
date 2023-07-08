@@ -40,7 +40,7 @@ export default {
 }
 
 html {
-  font-family: "Roboto", sans-serif;
+  font-family: "Nunito", sans-serif;
 }
 
 body {
