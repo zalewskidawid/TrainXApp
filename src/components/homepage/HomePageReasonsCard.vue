@@ -18,6 +18,9 @@ export default {
   position: relative;
   max-width: 400px;
   margin: 32px;
+  @media(max-width: 768px) {
+    margin: 16px 0;
+  }
   &__title {
     color: white;
     font-size: 24px;

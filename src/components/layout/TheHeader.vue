@@ -2,20 +2,20 @@
   <header :class="{ 'scrolled': isScrolled }">
     <nav>
       <h2 class="header-home">
-        <router-link to="/">Train<span>X</span>App</router-link>
+        <router-link class="menu-logo" to="/">Train<span>X</span>App</router-link>
       </h2>
       <ul>
         <li>
-          <router-link to="/coaches">Trenerzy</router-link>
+          <router-link class="menu-item" to="/coaches">Trenerzy</router-link>
         </li>
         <li>
-          <router-link to="/plans">Plany</router-link>
+          <router-link class="menu-item" to="/plans">Plany</router-link>
         </li>
         <li v-if="isLoggedIn">
-          <router-link to="/requests">Wiadomości</router-link>
+          <router-link class="menu-item" to="/requests">Wiadomości</router-link>
         </li>
         <li v-else>
-          <router-link to="/auth">Logowanie</router-link>
+          <router-link class="menu-item" to="/auth">Logowanie</router-link>
         </li>
         <li v-if="isLoggedIn">
           <base-button @click="logout">Wyloguj się</base-button>
@@ -64,7 +64,6 @@ header {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
   z-index: 999;
   transition: all .3s ease-in;
 }
@@ -73,25 +72,35 @@ header.scrolled {
   height: 72px;
 }
 
-header a {
+header a.menu-item {
   text-decoration: none;
   color: white;
   display: inline-block;
-  padding: 16px 32px;
-  border: 1px solid transparent;
+  padding: 12px 20px;
+  border: 1px solid $primary-color;
   text-transform: uppercase;
   font-weight: bold;
   border-radius: 25px;
   &:hover {
     color: white;
+    background-color: $primary-color-darker
+  }
+}
+header a.menu-logo {
+  text-decoration: none;
+  text-transform: uppercase;
+  border: unset;
+  &:hover {
+    border: unset;
   }
 }
 
-a:active,
-a:hover,
-a.router-link-active {
+a.menu-item:active,
+a.menu-item:hover,
+a.menu-item.router-link-active {
   border: 1px solid $primary-color;
-  color: $primary-color-dark;
+  color: white;
+  background-color: $primary-color-darker
 }
 
 .header-home {
@@ -118,6 +127,7 @@ header nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  max-width: 1600px;
 }
 
 header ul {

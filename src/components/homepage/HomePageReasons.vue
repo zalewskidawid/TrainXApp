@@ -1,5 +1,6 @@
 <template>
   <section class="homepage-reasons-wrapper">
+    <div class="homepage-reasons-container">
     <div class="homepage-reasons-text-container">
       <h2 class="homepage-reasons-text-container__title">
         Odkryj moc zdrowego trybu życia z TrainXApp!
@@ -36,6 +37,7 @@
         Prowadzenie zdrowego trybu życia to inwestycja w swoje zdrowie na długą metę. Regularna aktywność fizyczna, zdrowa dieta i dbanie o siebie przynoszą wiele korzyści, takich jak redukcja ryzyka chorób, poprawa jakości snu i dłuższe życie. TrainXApp jest Twoim wsparciem w realizacji długoterminowych celów zdrowotnych.
       </home-page-reasons-card>
     </div>
+    </div>
   </section>
 </template>
 
@@ -55,28 +57,40 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
+  justify-content: center;
   padding: 0 32px;
-
-  .homepage-reasons-text-container {
-    max-width: 1200px;
-    &__title {
-      color: white;
-      text-align: center;
-      font-size: 36px;
-    }
-
-    &__subtitle {
-      font-size: 16px;
-      color: $gray-color;
-      text-align: center;
-    }
+  max-width: 1600px;
+  @media(max-width: 768px) {
+    padding: 0 16px;
   }
-  .homepage-reasons-card-wrapper {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    flex-direction: row;
-    flex-wrap: wrap;
+  .homepage-reasons-container {
+    max-width: 1600px;
+    .homepage-reasons-text-container {
+      &__title {
+        color: white;
+        text-align: center;
+        font-size: 36px;
+        @media(max-width: 768px) {
+          font-size: 26px;
+        }
+      }
+
+      &__subtitle {
+        font-size: 16px;
+        color: $gray-color;
+        text-align: center;
+        @media(max-width: 768px) {
+          font-size: 14px;
+        }
+      }
+    }
+    .homepage-reasons-card-wrapper {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
   }
 }
 </style>

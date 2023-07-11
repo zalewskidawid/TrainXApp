@@ -5,13 +5,16 @@
       <component :is="slotProps.Component"></component>
     </transition>
   </router-view>
+  <the-footer></the-footer>
 </template>
 
 <script>
 import TheHeader from './components/layout/TheHeader.vue';
+import TheFooter from "@/components/layout/TheFooter";
 
 export default {
   components: {
+    TheFooter,
     TheHeader
   },
   computed: {
@@ -37,6 +40,10 @@ export default {
 
 * {
   box-sizing: border-box;
+}
+#app {
+  background: rgb(23,84,119);
+  background: linear-gradient(180deg, rgba(23,84,119,1) 0%, rgba(9,34,48,1) 35%, rgba(0,0,0,1) 100%);
 }
 
 html {

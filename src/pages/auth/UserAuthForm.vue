@@ -217,7 +217,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/variables.scss";
+
 form {
   margin: 1rem;
   padding: 1rem;
@@ -228,6 +230,10 @@ form {
 .radio-btn-container {
   display: flex;
   align-items: center;
+
+  span {
+    color: white;
+  }
 }
 .register-radio-btn {
   width: auto;
@@ -238,6 +244,7 @@ label {
   font-weight: bold;
   display: block;
   margin-bottom: 0.5rem;
+  color: white;
 }
 .form-signup-wrapper, .form-login-wrapper {
   margin-bottom: 40px;
@@ -255,23 +262,28 @@ textarea {
   width: 100%;
   border: 1px solid #ccc;
   font: inherit;
+  background: transparent;
+  border: 2px solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(to left, $primary-color, $primary-color-darker);
+  color: white;
 }
 
 input:focus,
 textarea:focus {
-  background-color: #f0e6fd;
+  background-color: $primary-color-darker;
   outline: none;
-  border-color: #3d008d;
 }
 
 input[type='checkbox'] {
   display: inline;
   width: auto;
   border: none;
+  color: white;
 }
 
 input[type='checkbox']:focus {
-  outline: #3d008d solid 1px;
+  outline: $primary-color-darker solid 1px;
 }
 
 h3 {
@@ -290,5 +302,8 @@ h3 {
 .invalid .radio-btn-container {
   color: red;
   font-weight: 600;
+}
+.invalid p {
+  color: white;
 }
 </style>

@@ -20,6 +20,7 @@ export default {}
 .main-banner-wrapper {
   height: 100vh;
   width: 100%;
+  max-width: 1600px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -33,12 +34,24 @@ export default {}
     height: auto;
     padding: 0 32px;
     width: 100%;
+    @media(max-width: 850px) {
+      flex-direction: column;
+    }
+    @media(max-width: 768px) {
+      padding: 0 16px;
+    }
     .main-banner-text {
       height: 100%;
+      @media(max-width: 850px) {
+        margin-bottom: 32px;
+      }
       h1 {
         color: white;
         font-size: 64px;
         margin-bottom: 16px;
+        @media(max-width: 768px) {
+          font-size: 48px;
+        }
         span {
           color: $primary-color;
         }
@@ -48,6 +61,9 @@ export default {}
         margin-bottom: 32px;
         font-size: 32px;
         margin-top: 0;
+        @media(max-width: 768px) {
+          font-size: 24px;
+        }
       }
     }
     a {

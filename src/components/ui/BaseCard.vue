@@ -4,12 +4,26 @@
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/variables.scss";
 .card {
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  display: block;
   padding: 1rem;
   margin: 2rem auto;
   max-width: 40rem;
+  position: relative;
+  z-index: 1;
+  &:before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50px;
+    padding: 2px;
+    background:linear-gradient(45deg,$primary-color,$primary-color-dark);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    z-index: -1;
+  }
 }
 </style>

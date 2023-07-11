@@ -1,5 +1,5 @@
 <template>
-  <div class="margin-top-page">
+  <section class="margin-top-page user-auth-page" >
     <base-dialog :show="!!error" title="An error occurred" @close="handleError">
       <p>{{ error }}</p>
     </base-dialog>
@@ -9,7 +9,7 @@
     <base-card>
      <user-auth-form @auth-form-data="AuthFormData"></user-auth-form>
     </base-card>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -47,3 +47,15 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.user-auth-page {
+  background: rgb(23,84,119);
+  background: linear-gradient(180deg, rgba(23,84,119,1) 0%, rgba(9,34,48,1) 35%, rgba(0,0,0,1) 100%);
+  min-height: calc(100vh - 120px);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>
