@@ -43,12 +43,12 @@
       </div>
       <div class="form-control" :class="{invalid: !userType.isValid}" v-if="mode === 'signup'">
         <div class="radio-btn-container">
-          <input name="userType" type="radio" v-model="userType.val" value="client" class="register-radio-btn"
-                 @blur="clearValidity('userType')"><span>Użytkownik</span>
+          <input name="userType" type="radio" v-model="userType.val" value="client" class="register-radio-btn" id="client"
+                 @blur="clearValidity('userType')"><label for="client">Użytkownik</label>
         </div>
         <div class="radio-btn-container">
           <input name="userType" type="radio" v-model="userType.val" value="trainer"
-                 class="register-radio-btn" @blur="clearValidity('userType')"><span>Trener</span>
+                 class="register-radio-btn" @blur="clearValidity('userType')" id="trainer"><label for="trainer">Trener</label>
         </div>
         <p v-if="!userType.isValid">Musi być wybrana wartość</p>
       </div>
@@ -230,11 +230,62 @@ form {
 .radio-btn-container {
   display: flex;
   align-items: center;
+  &:first-of-type {
+    margin-bottom: 8px;
+  }
 
-  span {
+  label {
     color: white;
+    margin-bottom: 0;
+  }
+  //test btn
+  input[type='radio'] {
+    opacity: 0;
+    display: none;
+  }
+  input[type='radio'] + label {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: white;
+    padding-left: 30px;
+  }
+  input[type='radio'] + label::before {
+    content: "";
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    outline: 2px solid $primary-color;
+    background: transparent;
+    border-radius: 50%;
+    margin-right: 16px;
+    left: 0;
+  }
+  input[type='radio']:checked + label::before {
+    outline: 2px solid $primary-color;
+  }
+  input[type='radio'] + label::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    outline: 2px solid $primary-color;
+    background: $primary-color;
+    border-radius: 50%;
+    margin-right: 16px;
+    left: 4px;
+    top: 6px;
+    opacity: 0;
+    transform: scale(0);
+    transition: all .3s ease-in;
+  }
+  input[type='radio']:checked + label::after {
+    opacity: 1;
+    transform: scale(1);
   }
 }
+
 .register-radio-btn {
   width: auto;
   cursor: pointer;
