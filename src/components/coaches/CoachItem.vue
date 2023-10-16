@@ -33,10 +33,12 @@ export default {
 <style scoped>
 li {
   margin: 1rem 0;
-  border: 1px solid #424242;
+  border: 1px solid white;
   border-radius: 12px;
   padding: 1rem;
+  color: white;
 }
+
 
 h3 {
   font-size: 1.5rem;

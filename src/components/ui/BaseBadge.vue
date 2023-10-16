@@ -15,7 +15,8 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/assets/variables.scss";
 .badge {
   background-color: #ccc;
   color: #252525;
@@ -26,7 +27,7 @@ export default {
 }
 
 .frontend {
-  background-color: #3d008d;
+  background-color: $primary-color;
   color: white;
 }
 

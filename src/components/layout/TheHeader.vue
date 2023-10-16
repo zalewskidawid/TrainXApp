@@ -1,10 +1,10 @@
 <template>
-  <header :class="{ 'scrolled': isScrolled }">
+  <header :class="{ 'scrolled': isScrolled, 'menu-active': isMenuActive }" >
     <nav>
       <h2 class="header-home">
         <router-link class="menu-logo" to="/">Train<span>X</span>App</router-link>
       </h2>
-      <ul>
+      <ul class="menu-desktop">
         <li>
           <router-link class="menu-item" to="/coaches">Trenerzy</router-link>
         </li>
@@ -18,7 +18,29 @@
           <router-link class="menu-item" to="/auth">Logowanie</router-link>
         </li>
         <li v-if="isLoggedIn">
-          <base-button @click="logout">Wyloguj się</base-button>
+          <base-button @click="logout" mode="flat">WYLOGUJ SIĘ</base-button>
+        </li>
+      </ul>
+      <div class="menu-hamburger" @click="menuStatusChange">
+        <div class="menu-hamburger__line line-1"></div>
+        <div class="menu-hamburger__line line-2"></div>
+        <div class="menu-hamburger__line line-3"></div>
+      </div>
+      <ul class="menu-mobile">
+        <li>
+          <router-link class="menu-item" to="/coaches" @click="disableMenu">Trenerzy</router-link>
+        </li>
+        <li>
+          <router-link class="menu-item" to="/plans" @click="disableMenu">Plany</router-link>
+        </li>
+        <li v-if="isLoggedIn">
+          <router-link class="menu-item" to="/requests" @click="disableMenu">Wiadomości</router-link>
+        </li>
+        <li v-else>
+          <router-link class="menu-item" to="/auth" @click="disableMenu">Logowanie</router-link>
+        </li>
+        <li v-if="isLoggedIn">
+          <base-button @click="logout">WYLOGUJ SIĘ</base-button>
         </li>
       </ul>
     </nav>
@@ -29,7 +51,8 @@
 export default {
   data() {
     return {
-      isScrolled: false
+      isScrolled: false,
+      isMenuActive: false
     }
   },
   computed: {
@@ -41,10 +64,16 @@ export default {
     logout() {
       this.$store.dispatch('logout');
       this.$router.replace('/coaches');
+      this.isMenuActive = false;
     },
     handleScroll() {
-        console.log(this.isScrolled);
         window.scrollY > 0 ? this.isScrolled = true : this.isScrolled = false;
+    },
+    menuStatusChange() {
+      this.isMenuActive = !this.isMenuActive;
+    },
+    disableMenu() {
+      this.isMenuActive = false;
     }
   },
   mounted() {
@@ -66,6 +95,10 @@ header {
   left: 0;
   z-index: 999;
   transition: all .3s ease-in;
+  padding-left: 32px;
+  @media(max-width: 768px) {
+    padding-left: 16px;
+  }
 }
 header.scrolled {
   background-color: rgba(0,0,0,0.6);
@@ -105,6 +138,7 @@ a.menu-item.router-link-active {
 
 .header-home {
   margin: 0;
+  z-index: 1;
 }
 
 .header-home a {
@@ -137,9 +171,96 @@ header ul {
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: 0.3s ease-in all;
 }
-
+header .menu-desktop {
+  display: none;
+  @media(min-width:769px) {
+    display: flex;
+  }
+}
+header .menu-mobile {
+  display: none;
+  @media(max-width: 768px) {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    justify-content: flex-start;
+    top:0;
+    background-color: black;
+    padding: 128px 0 64px 0;
+    width: 100%;
+    height: 100vh;
+    right: -110vw;
+    li {
+      margin: 16px 0;
+      a.menu-item,
+      a.menu-item:active,
+      a.menu-item:hover,
+      a.menu-item.router-link-active {
+        border: 0;
+        background-color: transparent;
+      }
+      a.menu-item {
+        padding: 0;
+      }
+      a.menu-item:active,
+      a.menu-item:hover,
+      a.menu-item.router-link-active {
+        color: $primary-color;
+      }
+    }
+  }
+}
+header.menu-active ul {
+  right: 0;
+}
 li {
   margin: 0 0.5rem;
+}
+header .menu-hamburger {
+  margin-right: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  height: 24px;
+  position: relative;
+  width: 25px;
+  z-index: 1;
+  &__line {
+    background: white;
+    height: 3px;
+    width: 25px;
+    position: absolute;
+    transition: 0.3s ease-in all;
+    top: 0;
+  }
+  .line-2, .line-3 {
+    position: absolute;
+    content: '';
+    top: 10px;
+    background: white;
+    height: 3px;
+    width: 25px;
+  }
+  .line-3 {
+    top: 20px;
+  }
+  @media(min-width: 769px) {
+    display: none;
+  }
+}
+header.menu-active .menu-hamburger {
+  .line-1 {
+    transform: rotate(45deg);
+    top: 10px;
+  }
+  .line-3 {
+    transform: rotate(-45deg);
+    top: 10px;
+  }
+  .line-2 {
+    opacity: 0;
+  }
 }
 </style>

@@ -1,9 +1,9 @@
 <template>
   <section class="margin-top-page user-auth-page" >
-    <base-dialog :show="!!error" title="An error occurred" @close="handleError">
+    <base-dialog :show="!!error" title="Coś poszło nie tak!" @close="handleError">
       <p>{{ error }}</p>
     </base-dialog>
-    <base-dialog :show="isLoading" title="Authenticating..." fixed>
+    <base-dialog :show="isLoading" title="Uwierzytelnianie..." fixed>
       <base-spinner></base-spinner>
     </base-dialog>
     <base-card>
@@ -38,7 +38,7 @@ export default {
         }
       } catch (err) {
         this.isLoading = false;
-        this.error = err.message || 'Failed to authenticate, try later.';
+        this.error = err.message || 'Nie udało się uwierzytelnić. Spróbuj później.';
       }
     },
     handleError() {

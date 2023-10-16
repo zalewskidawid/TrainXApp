@@ -70,7 +70,7 @@
         <p v-if="!password.isValid">Hasło musi wynosić conajmniej 8 znaków.</p>
       </div>
     </div>
-    <base-button>{{ submitButtonCaption }}</base-button>
+    <base-button mode="flat">{{ submitButtonCaption }}</base-button>
     <base-button type="button" mode="flat" @click="switchAuthMode">{{ switchModeButtonCaption }}</base-button>
   </form>
 </template>

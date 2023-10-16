@@ -1,6 +1,6 @@
 <template>
   <div class="margin-top-page">
-    <base-dialog :show="!!error" title="An error occurred!" @close="handleError">
+    <base-dialog :show="!!error" title="Coś poszło nie tak!" @close="handleError">
       <p>{{ error }}</p>
     </base-dialog>
     <section>
@@ -14,7 +14,7 @@
         <ul v-else-if="hasCoaches">
           <coach-item v-for="coach in returnCoaches" :id="coach.id" :first-name="coach.firstName" :last-name="coach.lastName" :rate="coach.hourlyRate" :email="coach.email" :userType="coach.userType" :key="coach.id"></coach-item>
         </ul>
-        <h3 v-else>No coaches found.</h3>
+        <h3 v-else>Nie znaleziono trenerów.</h3>
       </base-card>
     </section>
   </div>

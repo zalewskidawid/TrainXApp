@@ -47,7 +47,7 @@ export default {
 }
 
 html {
-  font-family: "Nunito", sans-serif;
+  font-family: "Nunito", sans-serif !important;
 }
 
 body {
@@ -55,6 +55,7 @@ body {
 }
 .margin-top-page {
   padding-top: 100px;
+  min-height: 100vh;
 }
 .route-enter-from {
   opacity: 0;
@@ -79,4 +80,5 @@ body {
   opacity: 1;
   transform: translateY(0);
 }
+
 </style>

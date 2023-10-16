@@ -1,0 +1,36 @@
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+input[type='checkbox'] + label {
+  font-weight: normal;
+  display: inline;
+  margin: 0 0 0 0.5rem;
+  color: white;
+}
+
+input,
+textarea {
+  display: block;
+  width: 100%;
+  border: 1px solid #ccc;
+  font: inherit;
+  background: transparent;
+  border: 2px solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(to left, $primary-color, $primary-color-darker);
+  color: white;
+  &::placeholder {
+    color: white;
+  }
+
+}
+
+input:focus,
+textarea:focus {
+  background-color: $primary-color-darker;
+  outline: none;
+}

@@ -1,6 +1,6 @@
 <template>
   <div class="margin-top-page">
-    <base-dialog :show="!!error" title="An error occurred!" @close="handleError">
+    <base-dialog :show="!!error" title="Coś poszło nie tak!" @close="handleError">
       <p>{{ error }}</p>
     </base-dialog>
     <section>
@@ -104,6 +104,7 @@ export default {
 <style scoped lang="scss">
 .filter-plans-container {
   margin-bottom: 16px;
+  color: white;
   input {
     cursor: pointer;
   }
@@ -111,5 +112,8 @@ export default {
 ul {
   margin: 0;
   padding: 0;
+}
+h3 {
+  color: white;
 }
 </style>

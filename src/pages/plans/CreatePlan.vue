@@ -1,10 +1,10 @@
 <template>
   <div class="margin-top-page">
-    <base-dialog :show="!!error" title="An error occurred!" @close="handleError">
+    <base-dialog :show="!!error" title="Coś poszło nie tak!" @close="handleError">
       <p>{{ error }}</p>
     </base-dialog>
     <base-card>
-      <h2>Create your plan</h2>
+      <h2>Stwórz swój plan</h2>
       <create-plan-form @create-plan-form-data="createPlanFormData"></create-plan-form>
     </base-card>
   </div>
@@ -27,6 +27,9 @@ export default {
         this.isLoading = true;
         try {
          await this.$store.dispatch('plans/addNewPlan', data);
+          await this.$store.dispatch('plans/loadAllPlans', {
+            forceRefresh: true
+          });
           this.$router.replace('/plans');
         } catch (err) {
           this.isLoading = false;
@@ -42,5 +45,7 @@ export default {
 
 
 <style scoped>
-
+h2 {
+  color: white;
+}
 </style>

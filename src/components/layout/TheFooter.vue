@@ -28,13 +28,12 @@ export default {
 .footer-wrapper {
   padding: 32px 32px 0 32px;
   background: black;
+  @media(max-width: 768px) {
+    padding: 0 16px;
+  }
   .footer-wrapper-container {
     max-width: 1600px;
     margin: 0 auto;
-    padding: 0 32px;
-    @media(max-width: 768px) {
-      padding: 0 16px;
-    }
     a {
       text-decoration: none;
       color: white;

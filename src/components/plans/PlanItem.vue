@@ -22,10 +22,11 @@ export default {
 <style scoped>
 li {
   margin: 1rem 0;
-  border: 1px solid #424242;
+  border: 1px solid rgba(255,255,255,1);
   border-radius: 12px;
   padding: 1rem;
   list-style-type: none;
+  color: white;
 }
 
 h3 {

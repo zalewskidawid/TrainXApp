@@ -50,7 +50,8 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/assets/variables.scss";
 .backdrop {
   position: fixed;
   top: 0;
@@ -73,11 +74,11 @@ dialog {
   padding: 0;
   margin: 0;
   overflow: hidden;
-  background-color: white;
+  background-color: black;
 }
 
 header {
-  background-color: #3a0061;
+  background-color: $primary-color;
   color: white;
   width: 100%;
   padding: 1rem;
@@ -89,6 +90,8 @@ header h2 {
 
 section {
   padding: 1rem;
+  background-color: black;
+  color: white;
 }
 
 menu {
@@ -96,6 +99,7 @@ menu {
   display: flex;
   justify-content: flex-end;
   margin: 0;
+  background-color: black;
 }
 
 .dialog-enter-from,
