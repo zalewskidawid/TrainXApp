@@ -125,6 +125,7 @@ header a.menu-logo {
   border: unset;
   &:hover {
     border: unset;
+    background-color: transparent;
   }
 }
 

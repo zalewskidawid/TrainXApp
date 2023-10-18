@@ -70,17 +70,20 @@ export default {}
       display: block;
       text-decoration: none;
       width: fit-content;
+      border: 0;
+      margin-top: 16px;
+      padding: 0;
       .cta-button {
         background-color: transparent;
         padding: 16px;
         border: 1px solid white;
         color: white;
-        margin-top: 16px;
         width: fit-content;
         transition: all .3s ease-in;
         border-radius: 25px;
       }
       &:hover {
+        background-color: transparent;
         .cta-button {
           border-color: $primary-color;
         }
