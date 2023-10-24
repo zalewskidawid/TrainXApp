@@ -17,7 +17,7 @@ export default {
          const responseData = await response.json();
          if (!response.ok) {
              const error = new Error(
-                 responseData.message || 'Failed to add new plan.'
+                 responseData.message || 'Nie udało się dodać planu.'
              );
              throw error;
          }
@@ -32,7 +32,7 @@ export default {
         );
         const responseData = await response.json();
         if (!response.ok) {
-            const error = new Error(responseData.message || 'Failed to fetch!');
+            const error = new Error(responseData.message || 'Nie udało się!');
             throw error;
         }
         const plans = [];
@@ -50,5 +50,19 @@ export default {
                 plans.push(plan);
         }
         context.commit('setAllPlans', plans);
+    },
+    async updatePlan(context, payload) {
+        const response = await fetch(`https://trainx-app-default-rtdb.europe-west1.firebasedatabase.app/plans/${payload.id}.json`, {
+                method: 'PUT',
+                body: JSON.stringify(payload)
+            }
+        );
+        const responseData = await response.json();
+        if (!response.ok) {
+            const error = new Error(responseData.message || 'Nie udało się zaktualizować planu!');
+            throw error;
+        }
+
+        context.commit('updateStorePlan', payload)
     }
 }

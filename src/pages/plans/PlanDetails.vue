@@ -173,7 +173,12 @@ export default {
     },
     savePlan() {
       this.validForm();
-      (this.formIsValid ? this.isEditing = false : this.isEditing = true)
+      if(this.formIsValid) {
+        this.isEditing = false
+        this.$store.dispatch("plans/updatePlan", this.selectedPlan);
+      } else {
+        this.isEditing = true
+      }
     },
 
   },
@@ -199,6 +204,10 @@ export default {
 input, textarea {
   width: auto;
   margin: 4px 4px;
+}
+textarea {
+  max-width: 100%;
+  max-height: 300px;
 }
 .error-msg {
   color: red;
