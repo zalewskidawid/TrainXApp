@@ -43,11 +43,13 @@ export default {
       font-weight: bold;
       border-radius: 25px;
       font-size: 1.5rem;
+      padding: 0;
       span {
         color: $primary-color;
       }
       &:hover {
         color: white;
+        background: transparent;
       }
     }
     .footer-content-container {

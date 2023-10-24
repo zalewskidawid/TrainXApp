@@ -55,7 +55,7 @@ body {
 }
 .margin-top-page {
   padding-top: 100px;
-  min-height: 100vh;
+  min-height: calc(100vh - 120px);
 }
 .route-enter-from {
   opacity: 0;
