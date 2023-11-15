@@ -11,6 +11,15 @@
       <textarea type="textarea" id="planDescription" placeholder="Description" v-model="planDescription.val" rows="5" cols="10"  @click="planDescription.isValid = true"></textarea>
       <p class="error-msg" v-if="!planDescription.isValid">Opis planu nie może być pusty.</p>
     </div>
+    <div class="form-control">
+      <label for="planCreator">Czy chcesz wyświetlać twórcę planu?</label>
+      <div class="plan-creator-radio-container">
+        <input name="planCreator" type="radio" v-model="planCreatorDisplay" value="Yes"><span>Tak</span>
+      </div>
+      <div class="plan-creator-radio-container">
+        <input name="planCreator" type="radio" v-model="planCreatorDisplay" value="No"><span>Nie</span>
+      </div>
+    </div>
     <div class="form-control" :class="{invalid: !planRecipient.isValid}">
       <p>Odbiorca planu</p>
       <div class="radio-btn-container">
@@ -51,7 +60,7 @@
             <label>
               Nazwa ćwiczenia:
               <input v-model="exercise.name"  @click="exercise.exerciseNameValid = true"/>
-              <p class="error-msg" v-if="!exercise.exerciseNameValid">Pole nazwy ćwiczenia nie może być puste.</p>
+              <p class="error-msg" v-if="!exercise.exerciseNameValid">Pole nazwy ćwiczenia nie może być puste, bądź zawierać liczb.</p>
             </label>
             </div>
             <div class="form-control" :class="{invalid: !exercise.exerciseSeriesValid}">
@@ -110,6 +119,8 @@ export default {
         },
       ],
       activeTabIndex: 0,
+      planRecipientEmail: '',
+      planRecipientEmailValid: true,
       planDescription: {
         val: '',
         isValid: true
@@ -118,15 +129,13 @@ export default {
         val: '',
         isValid: true
       },
-      planRecipientEmail: {
-        val: '',
-        isValid: true
-      },
       planRecipient: {
         val: '',
         isValid: true
       },
-      planRecipientText: ''
+      planRecipientText: '',
+      planCreatorDisplay: 'No',
+      planCreator: ''
     }
   },
   computed: {
@@ -198,19 +207,22 @@ export default {
           }
         })
       })
+      this.planCreatorDisplay === 'Yes' ? this.planCreator = this.$store.getters.userData : this.planCreator = ''
     },
     submitForm() {
       this.validForm();
       if (this.formIsValid === false) {
         return true;
       }
+
       const formData = {
         planTitle: this.planTitle.val,
         planDescription: this.planDescription.val,
         planRecipient: this.planRecipient.val,
-        planRecipientEmail: this.planRecipientEmail.val,
+        planRecipientEmail: this.planRecipientEmail,
         childPlans: this.childPlans,
-        planCreator: this.$store.getters.userId
+        planCreator: this.planCreator,
+        planCreatorDisplay: this.planCreatorDisplay
       }
       this.$emit('create-plan-form-data', formData);
     },
@@ -371,4 +383,16 @@ h3 {
 .invalid p {
   color: red;
 }
+.plan-creator-radio-container {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  input {
+    width: auto;
+    margin-right: 10px;
+    margin-left: 0;
+    cursor: pointer;
+  }
+}
+
 </style>

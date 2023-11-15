@@ -6,13 +6,13 @@
     <section>
       <base-card>
         <div class="controls">
-          <base-button mode="outline" @click="loadCoaches(true)">Refresh</base-button>
+          <base-button mode="outline" @click="loadCoaches(true)">Odśwież</base-button>
         </div>
         <div v-if="isLoading">
           <base-spinner></base-spinner>
         </div>
         <ul v-else-if="hasCoaches">
-          <coach-item v-for="coach in returnCoaches" :id="coach.id" :first-name="coach.firstName" :last-name="coach.lastName" :rate="coach.hourlyRate" :email="coach.email" :userType="coach.userType" :key="coach.id"></coach-item>
+          <coach-item v-for="coach in returnCoaches" :id="coach.id" :first-name="coach.firstName" :last-name="coach.lastName" :rate="coach.hourlyRate" :email="coach.email"  :key="coach.id"></coach-item>
         </ul>
         <h3 v-else>Nie znaleziono trenerów.</h3>
       </base-card>
@@ -57,7 +57,7 @@ export default {
           forceRefresh: refresh,
         });
       } catch (error) {
-        this.error = error.message || 'Something went wrong!';
+        this.error = error.message || 'Coś poszło nie tak!';
       }
       this.isLoading = false;
     },

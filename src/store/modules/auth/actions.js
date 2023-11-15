@@ -21,7 +21,8 @@ export default {
             body: JSON.stringify({
                 email: payload.email,
                 password: payload.password,
-                returnSecureToken: true
+                returnSecureToken: true,
+                displayName: `${payload.first} ' ' ${payload.last}`
             })
         });
         const responseData = await response.json();
@@ -76,15 +77,16 @@ export default {
         localStorage.setItem('userId', responseData.localId);
         localStorage.setItem('tokenExpiration', expirationDate);
         localStorage.setItem('userEmail', responseData.email);
+        localStorage.setItem('userData', responseData.displayName)
 
         timer = setTimeout(function () {
             context.dispatch('autoLogout');
         }, expiresIn);
-
         context.commit('setUser', {
             token: responseData.idToken,
             userId: responseData.localId,
-            email: responseData.email
+            email: responseData.email,
+            userData: responseData.displayName
         });
     },
     tryLogin(context) {
@@ -93,6 +95,7 @@ export default {
         const tokenExpiration = localStorage.getItem('tokenExpiration');
         const userEmail = localStorage.getItem('userEmail');
         const expiresIn = +tokenExpiration - new Date().getTime();
+        const userData = localStorage.getItem('userData');
 
         if (expiresIn < 0) {
             return;
@@ -106,7 +109,8 @@ export default {
             context.commit('setUser', {
                 token: token,
                 userId: userId,
-                email: userEmail
+                email: userEmail,
+                userData: userData
             });
         }
     },
@@ -115,13 +119,15 @@ export default {
         localStorage.removeItem('userId');
         localStorage.removeItem('tokenExpiration');
         localStorage.removeItem('userEmail')
+        localStorage.removeItem('userData')
 
         clearTimeout(timer);
 
         context.commit('setUser', {
             token: null,
             userId: null,
-            email: null
+            email: null,
+            userData: ''
         });
     },
     autoLogout(context) {

@@ -1,19 +1,22 @@
 <template>
-  <section class="margin-top-page user-auth-page" >
-    <base-dialog :show="!!error" title="Coś poszło nie tak!" @close="handleError">
-      <p>{{ error }}</p>
-    </base-dialog>
-    <base-dialog :show="isLoading" title="Uwierzytelnianie..." fixed>
-      <base-spinner></base-spinner>
-    </base-dialog>
-    <base-card>
-     <user-auth-form @auth-form-data="AuthFormData"></user-auth-form>
-    </base-card>
-  </section>
+  <div class="margin-top-page">
+    <section>
+      <base-dialog :show="!!error" title="Coś poszło nie tak!" @close="handleError">
+        <p>{{ error }}</p>
+      </base-dialog>
+      <base-dialog :show="isLoading" title="Uwierzytelnianie..." fixed>
+        <base-spinner></base-spinner>
+      </base-dialog>
+      <base-card>
+        <user-auth-form @auth-form-data="AuthFormData"></user-auth-form>
+      </base-card>
+    </section>
+  </div>
 </template>
 
 <script>
 import UserAuthForm from "@/pages/auth/UserAuthForm";
+
 export default {
   data() {
     return {
@@ -25,10 +28,10 @@ export default {
     UserAuthForm
   },
   methods: {
-   async AuthFormData(data) {
+    async AuthFormData(data) {
       this.isLoading = true;
       try {
-        if(data.mode === 'login') {
+        if (data.mode === 'login') {
           await this.$store.dispatch('login', data);
           const redirectUrl = '/' + (this.$route.query.redirect || 'coaches');
           this.$router.replace(redirectUrl);
@@ -50,8 +53,8 @@ export default {
 
 <style lang="scss" scoped>
 .user-auth-page {
-  background: rgb(23,84,119);
-  background: linear-gradient(180deg, rgba(23,84,119,1) 0%, rgba(9,34,48,1) 35%, rgba(0,0,0,1) 100%);
+  background: rgb(23, 84, 119);
+  background: linear-gradient(180deg, rgba(23, 84, 119, 1) 0%, rgba(9, 34, 48, 1) 35%, rgba(0, 0, 0, 1) 100%);
   min-height: calc(100vh - 120px);
   margin: 0;
   display: flex;

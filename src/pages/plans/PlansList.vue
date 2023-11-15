@@ -5,25 +5,33 @@
     </base-dialog>
     <section>
       <base-card>
-        <div class="filter-plans-container">
+        <div v-if="userLoggedIn" class="filter-plans-container">
           <label>
-            <input type="checkbox" v-model="myPlansChecked">
+            <input type="radio" id="myPlans" value="myPlans" v-model="plansType">
             Moje plany
           </label>
           <label>
-            <input type="checkbox" v-model="allPlansChecked">
+            <input type="radio" id="allPlans" value="allPlans" v-model="plansType">
             Wszystkie plany
           </label>
+          <label>
+              <input type="radio" id="clientsPlans" value="clientsPlans" v-model="plansType">
+              Plany dla podopiecznych
+          </label>
         </div>
-        <base-button mode="outline" @click="loadAllPlans(true)">Refresh</base-button>
-        <base-button link to="plans/createPlan">Create Plan</base-button>
+        <div class="client-filter-container" v-if="plansType==='clientsPlans'">
+          <input type="text" id="filterClient" class="filterClient" placeholder="Znajdź podopiecznego" v-model="clientFilterInput">
+        </div>
+        <base-button mode="outline" @click="loadAllPlans(true)">Odśwież</base-button>
+        <base-button link to="plans/createPlan">Utwórz plan</base-button>
       </base-card>
     </section>
    <section>
      <base-card>
        <base-spinner v-if="isLoading"></base-spinner>
        <ul v-else-if="!isLoading && hasPlans && filteredPlans.length > 0">
-       <plan-item v-for="plan in filteredPlans" :key="plan.id" :id="plan.id" :plan-name="plan.planTitle" :plan-description="plan.planDescription"></plan-item>
+       <plan-item v-for="plan in filteredPlans" :key="plan.id" :id="plan.id" :plan-name="plan.planTitle" :plan-description="plan.planDescription" :plan-first-name="plan.recipientFirstName" :plan-last-name="plan.recipientLastName" :plans-type="plansType" :plan-creator-data="plan.planCreator" :plan-creator-display="plan.planCreatorDisplay">
+       </plan-item>
        </ul>
        <h3 v-else-if="filteredPlans.length === 0">Nie masz żadnych planów.</h3>
      </base-card>
@@ -43,8 +51,8 @@ export default {
     return {
       error:null,
       isLoading: false,
-      myPlansChecked: false,
-      allPlansChecked: false
+      plansType: 'allPlans',
+      clientFilterInput: ''
     }
   },
   watch: {
@@ -63,14 +71,23 @@ export default {
     hasPlans() {
       return this.$store.getters['plans/hasPlans'];
     },
+    userLoggedIn() {
+      return this.$store.getters['isAuthenticated']
+    },
     filteredPlans() {
       const plans = this.$store.getters['plans/plans'];
-
-      if (this.myPlansChecked) {
+      const filterInput = this.clientFilterInput.toLowerCase();
+      if (this.plansType === 'myPlans') {
         return plans.filter(plan => plan.planRecipientEmail === this.$store.getters['userEmail'] || plan.planCreator === localStorage.getItem('userId'));
-      } else if (this.allPlansChecked) {
+      } else if (this.plansType === 'allPlans') {
         return plans;
-      } else {
+      } else if(this.plansType === 'clientsPlans') {
+        return plans.filter(plan => plan.planRecipientEmail !== this.$store.getters['userEmail']
+            && plan.planCreator === localStorage.getItem('userId')
+            && ((plan.recipientFirstName + ' ' + plan.recipientLastName).toLowerCase().includes(filterInput) ||
+            (plan.recipientLastName + ' ' + plan.recipientFirstName).toLowerCase().includes(filterInput)));
+      }
+      else {
         return [];
       }
     }
@@ -102,12 +119,22 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import './src/assets/variables';
+@import './src/assets/formFields';
+
 .filter-plans-container {
   margin-bottom: 16px;
   color: white;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   input {
     cursor: pointer;
   }
+}
+.client-filter-container {
+  width: 100%;
+  margin-bottom: 16px;
 }
 ul {
   margin: 0;
@@ -115,5 +142,9 @@ ul {
 }
 h3 {
   color: white;
+}
+input[type="radio"] {
+  display: unset;
+  width: unset;
 }
 </style>

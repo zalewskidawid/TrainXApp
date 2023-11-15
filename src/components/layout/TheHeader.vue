@@ -105,7 +105,7 @@ header.scrolled {
   height: 72px;
 }
 
-header a.menu-item {
+header a.menu-item, button {
   text-decoration: none;
   color: white;
   display: inline-block;
@@ -117,6 +117,10 @@ header a.menu-item {
   &:hover {
     color: white;
     background-color: $primary-color-darker
+  }
+  @media(max-width: 1000px) {
+    font-size: 14px;
+    padding: 8px 16px;
   }
 }
 header a.menu-logo {
@@ -198,16 +202,20 @@ header .menu-mobile {
       a.menu-item,
       a.menu-item:active,
       a.menu-item:hover,
-      a.menu-item.router-link-active {
+      a.menu-item.router-link-active,
+      button{
         border: 0;
         background-color: transparent;
       }
-      a.menu-item {
+      a.menu-item,
+      button{
         padding: 0;
       }
       a.menu-item:active,
       a.menu-item:hover,
-      a.menu-item.router-link-active {
+      a.menu-item.router-link-active,
+      button:hover,
+      button:active, {
         color: $primary-color;
       }
     }

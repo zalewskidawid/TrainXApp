@@ -35,9 +35,7 @@ export default {
 }
 </script>
 
-<style>
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
-
+<style lang="scss">
 * {
   box-sizing: border-box;
 }
@@ -56,6 +54,9 @@ body {
 .margin-top-page {
   padding-top: 100px;
   min-height: calc(100vh - 120px);
+  @media(max-width:768px) {
+    min-height: calc(100vh - 88px);
+  }
 }
 .route-enter-from {
   opacity: 0;

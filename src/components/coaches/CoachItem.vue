@@ -2,17 +2,16 @@
   <li>
     <p>{{fullName}}</p>
     <p>{{rateDisplay}}</p>
-    <p>{{userType}}</p>
     <div class="actions">
-      <base-button mode="outline" link :to="coachContactLink">Contact</base-button>
-      <base-button link :to="coachDetailsLink">View Details</base-button>
+      <base-button mode="outline" link :to="coachContactLink">Kontakt</base-button>
+      <base-button link :to="coachDetailsLink">Szczegóły</base-button>
     </div>
   </li>
 </template>
 
 <script>
 export default {
-  props: ['userType', 'firstName', 'lastName', 'rate', 'id'],
+  props: ['firstName', 'lastName', 'rate', 'id'],
   computed: {
     coachContactLink() {
       return this.$route.path + '/' + this.id + '/contact'; // /coaches/c1/contact
