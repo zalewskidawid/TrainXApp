@@ -14,6 +14,9 @@
         <li v-if="isLoggedIn">
           <router-link class="menu-item" to="/requests">Wiadomości</router-link>
         </li>
+        <li v-if="isLoggedIn">
+          <router-link class="menu-item" to="/myProfile">Mój profil</router-link>
+        </li>
         <li v-else>
           <router-link class="menu-item" to="/auth">Logowanie</router-link>
         </li>
@@ -35,6 +38,9 @@
         </li>
         <li v-if="isLoggedIn">
           <router-link class="menu-item" to="/requests" @click="disableMenu">Wiadomości</router-link>
+        </li>
+        <li v-if="isLoggedIn">
+          <router-link class="menu-item" to="/myProfile" @click="disableMenu">Mój profil</router-link>
         </li>
         <li v-else>
           <router-link class="menu-item" to="/auth" @click="disableMenu">Logowanie</router-link>

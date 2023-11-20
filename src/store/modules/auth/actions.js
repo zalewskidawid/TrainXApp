@@ -82,6 +82,7 @@ export default {
         timer = setTimeout(function () {
             context.dispatch('autoLogout');
         }, expiresIn);
+
         context.commit('setUser', {
             token: responseData.idToken,
             userId: responseData.localId,
@@ -114,7 +115,7 @@ export default {
             });
         }
     },
-    logout(context) {
+     logout(context) {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
         localStorage.removeItem('tokenExpiration');
@@ -129,6 +130,7 @@ export default {
             email: null,
             userData: ''
         });
+         context.commit('profile/setUpdate', true);
     },
     autoLogout(context) {
         context.dispatch('logout');

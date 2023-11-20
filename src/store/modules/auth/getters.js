@@ -8,6 +8,9 @@ export default {
   userData(state) {
     return state.userData
   },
+  userType(state) {
+    return state;
+  },
   token(state) {
     return state.token;
   },

@@ -13,6 +13,7 @@ const CoachDetail = defineAsyncComponent(() => import('./pages/coaches/CoachDeta
 const ContactCoach = defineAsyncComponent(() => import('./pages/requests/ContactCoach.vue'));
 const RequestsReceived = defineAsyncComponent(() => import('./pages/requests/RequestsReceived.vue'));
 const UserAuth = defineAsyncComponent(() => import('./pages/auth/UserAuth.vue'));
+const userProfile = defineAsyncComponent(() => import ('./pages/profile/userProfile.vue'))
 
 
 const router = createRouter({
@@ -35,6 +36,7 @@ const router = createRouter({
         {path: '/plans', component: PlansList},
         {path: '/plans/:id',component: PlanDetails, props: true},
         {path: '/plans/createPlan', component: createPlan, meta: {requiresAuth: true}},
+        {path: '/myProfile', component: userProfile, meta: {requiresAuth: true}},
         {path: '/:notFound(.*)', component: NotFound}
     ]
 });
