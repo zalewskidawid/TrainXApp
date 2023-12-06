@@ -9,7 +9,8 @@ export default {
              planRecipientEmail: payload.planRecipientEmail,
              planCreator: payload.planCreator,
              childPlans: payload.childPlans,
-             planCreatorDisplay: payload.planCreatorDisplay
+             planCreatorDisplay: payload.planCreatorDisplay,
+             planCreatorEmail: payload.planCreatorEmail
          }
          async function planRecipient() {
              if(payload.planRecipient === 'forClient') {
@@ -66,7 +67,8 @@ export default {
                 planCreator: responseData[key].planCreator,
                 recipientFirstName: responseData[key].recipientFirstName,
                 recipientLastName: responseData[key].recipientLastName,
-                planCreatorDisplay: responseData[key].planCreatorDisplay
+                planCreatorDisplay: responseData[key].planCreatorDisplay,
+                planCreatorEmail: responseData[key].planCreatorEmail
             };
                 plans.push(plan);
         }

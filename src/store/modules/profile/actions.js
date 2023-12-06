@@ -25,5 +25,29 @@ export default {
        };
        context.commit('setUpdate', false);
        context.commit('setUser', userData)
+    },
+    async updateUserInfo(context, payload) {
+       const userType = context.getters.userData[0].userType;
+       const userId = context.getters.userData[0].id;
+        const userData = {
+            firstName: payload.firstname,
+            lastName: payload.lastname,
+            description: payload.description,
+            rate: payload.rate,
+            email: payload.email,
+            userId: userId,
+            userType: userType
+        }
+        const response = await fetch(`https://trainx-app-default-rtdb.europe-west1.firebasedatabase.app/${userType}s/${userId}.json`, {
+                method: 'PUT',
+                body: JSON.stringify(userData)
+            }
+        );
+        const responseData = await response.json();
+        if (!response.ok) {
+            const error = new Error(responseData.message || 'Nie udało się zaktualizować planu!');
+            throw error;
+        }
+       context.commit('updateUser', userData)
     }
 }

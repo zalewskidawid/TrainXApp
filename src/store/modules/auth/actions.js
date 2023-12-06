@@ -22,7 +22,7 @@ export default {
                 email: payload.email,
                 password: payload.password,
                 returnSecureToken: true,
-                displayName: `${payload.first} ' ' ${payload.last}`
+                displayName: `${payload.first} ${payload.last}`
             })
         });
         const responseData = await response.json();
@@ -51,7 +51,41 @@ export default {
             throw error;
         }
     },
+    async resetPassword(context, payload) {
+        const email = payload.email;
+
+        // Step 1: Send a password reset email
+        const resetPasswordUrl = `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyC7sDufCs5on6nIJG3GGOPi9MZrtlVBp2E`;
+        const resetPasswordBody = JSON.stringify({
+            email: email,
+            requestType: 'PASSWORD_RESET',
+        });
+
+        try {
+            const resetPasswordResponse = await fetch(resetPasswordUrl, {
+                method: 'POST',
+                body: resetPasswordBody,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!resetPasswordResponse.ok) {
+                const errorData = await resetPasswordResponse.json();
+                if (errorData.error.message.includes('EMAIL_NOT_FOUND')) {
+                    const error = new Error(errorData.error.message || 'Taki email nie istnieje');
+                    throw error;
+                } else {
+                    const error = new Error(errorData.error.message || 'Wystąpił błąd przy wysyłaniu linku do resetowania hasła');
+                    throw error;
+                }
+            }
+        } catch (error) {
+            throw ('Wystąpił błąd przy wysylaniu linku do resetowania hasła: ', error.message)
+        }
+    },
     async authLogin(context, payload) {
+        let userType;
         let url =
             'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC7sDufCs5on6nIJG3GGOPi9MZrtlVBp2E';
         const response = await fetch(url, {
@@ -63,12 +97,29 @@ export default {
             })
         });
         const responseData = await response.json();
+        const userId = responseData.localId;
         if (!response.ok) {
             const error = new Error(
-                responseData.message || 'Failed to Login. Check your login data.'
+                responseData.message || 'Nie udało się zalogować, sprawdź dane.'
             );
             throw error;
         }
+
+        async function getUserType() {
+            let response = await fetch(`https://trainx-app-default-rtdb.europe-west1.firebasedatabase.app/trainers/${userId}.json`);
+            let responseData = await response.json();
+            if(responseData === null) {
+                response = await fetch(`https://trainx-app-default-rtdb.europe-west1.firebasedatabase.app/clients/${userId}.json`);
+                responseData = await response.json();
+            }
+            if (!response.ok) {
+                const error = new Error(responseData.message || 'Failed to fetch!');
+                throw error;
+            }
+            userType = responseData.userType;
+        }
+        await getUserType();
+
         const expiresIn = +responseData.expiresIn * 1000;
         // const expiresIn = 5000;
         const expirationDate = new Date().getTime() + expiresIn;
@@ -78,6 +129,7 @@ export default {
         localStorage.setItem('tokenExpiration', expirationDate);
         localStorage.setItem('userEmail', responseData.email);
         localStorage.setItem('userData', responseData.displayName)
+        localStorage.setItem('userType', userType);
 
         timer = setTimeout(function () {
             context.dispatch('autoLogout');
@@ -85,9 +137,10 @@ export default {
 
         context.commit('setUser', {
             token: responseData.idToken,
-            userId: responseData.localId,
+            userId: userId,
             email: responseData.email,
-            userData: responseData.displayName
+            userData: responseData.displayName,
+            userType: userType
         });
     },
     tryLogin(context) {
@@ -95,6 +148,7 @@ export default {
         const userId = localStorage.getItem('userId');
         const tokenExpiration = localStorage.getItem('tokenExpiration');
         const userEmail = localStorage.getItem('userEmail');
+        const userType = localStorage.getItem('userType')
         const expiresIn = +tokenExpiration - new Date().getTime();
         const userData = localStorage.getItem('userData');
 
@@ -111,7 +165,8 @@ export default {
                 token: token,
                 userId: userId,
                 email: userEmail,
-                userData: userData
+                userData: userData,
+                userType: userType
             });
         }
     },
@@ -121,6 +176,7 @@ export default {
         localStorage.removeItem('tokenExpiration');
         localStorage.removeItem('userEmail')
         localStorage.removeItem('userData')
+         localStorage.removeItem('userType')
 
         clearTimeout(timer);
 
@@ -128,7 +184,8 @@ export default {
             token: null,
             userId: null,
             email: null,
-            userData: ''
+            userData: '',
+            userType: ''
         });
          context.commit('profile/setUpdate', true);
     },

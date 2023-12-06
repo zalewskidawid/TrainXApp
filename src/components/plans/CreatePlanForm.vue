@@ -222,7 +222,8 @@ export default {
         planRecipientEmail: this.planRecipientEmail,
         childPlans: this.childPlans,
         planCreator: this.planCreator,
-        planCreatorDisplay: this.planCreatorDisplay
+        planCreatorDisplay: this.planCreatorDisplay,
+        planCreatorEmail: this.$store.getters['userEmail']
       }
       this.$emit('create-plan-form-data', formData);
     },

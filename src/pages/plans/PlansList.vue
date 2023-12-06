@@ -14,12 +14,12 @@
             <input type="radio" id="allPlans" value="allPlans" v-model="plansType">
             Wszystkie plany
           </label>
-          <label>
+          <label v-if="getUserType === 'trainer'">
               <input type="radio" id="clientsPlans" value="clientsPlans" v-model="plansType">
               Plany dla podopiecznych
           </label>
         </div>
-        <div class="client-filter-container" v-if="plansType==='clientsPlans'">
+        <div class="client-filter-container" v-if="plansType==='clientsPlans' && getUserType === 'trainer'">
           <input type="text" id="filterClient" class="filterClient" placeholder="Znajdź podopiecznego" v-model="clientFilterInput">
         </div>
         <base-button mode="outline" @click="loadAllPlans(true)">Odśwież</base-button>
@@ -74,6 +74,9 @@ export default {
     userLoggedIn() {
       return this.$store.getters['isAuthenticated']
     },
+    getUserType() {
+      return this.$store.getters.userType;
+    },
     filteredPlans() {
       const plans = this.$store.getters['plans/plans'];
       const filterInput = this.clientFilterInput.toLowerCase();
@@ -83,7 +86,7 @@ export default {
         return plans;
       } else if(this.plansType === 'clientsPlans') {
         return plans.filter(plan => plan.planRecipientEmail !== this.$store.getters['userEmail']
-            && plan.planCreator === localStorage.getItem('userId')
+            && plan.planCreatorEmail === localStorage.getItem('userEmail')
             && ((plan.recipientFirstName + ' ' + plan.recipientLastName).toLowerCase().includes(filterInput) ||
             (plan.recipientLastName + ' ' + plan.recipientFirstName).toLowerCase().includes(filterInput)));
       }
@@ -101,6 +104,10 @@ export default {
     this.allPlansChecked = true;
   },
   methods: {
+    handleError() {
+      this.error = null
+      this.$router.replace('/coaches');
+    },
     async loadAllPlans(refresh) {
       try {
         this.isLoading = true

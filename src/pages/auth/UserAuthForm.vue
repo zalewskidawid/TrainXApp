@@ -58,25 +58,34 @@
         <p v-if="!rate.isValid">Wartość musi być większa od 0.</p>
       </div>
     </div>
-    <div class="form-login-wrapper" v-else>
+    <div class="form-login-wrapper" v-else-if="this.mode === 'login'">
       <div class="form-control" :class="{invalid: !email.isValid}">
         <label for="email">E-Mail</label>
         <input type="email" id="email" v-model.trim="email.val" @blur="clearValidity('email')"/>
         <p v-if="!email.isValid">Email nie może być pusty.</p>
       </div>
-      <div class="form-control" :class="{invalid: !password.isValid}">
+      <div class="form-control">
         <label for="password">Hasło</label>
-        <input type="password" id="password" v-model.trim="password.val" @blur="clearValidity('password')"/>
-        <p v-if="!password.isValid">Hasło musi wynosić conajmniej 8 znaków.</p>
+        <input type="password" id="password" v-model.trim="password.val"/>
       </div>
     </div>
+    <div v-else class="form-reset-password-wrapper">
+      <div class="form-control" :class="{invalid: !email.isValid}">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" v-model.trim="email.val" @blur="clearValidity('email')"/>
+        <p v-if="!email.isValid">Email nie może być pusty.</p>
+      </div>
+    </div>
+    <p v-if="mode !== 'reset'" class="reset-password-link" @click="resetPasswordMode">Nie pamiętasz hasła?</p>
     <base-button mode="flat">{{ submitButtonCaption }}</base-button>
     <base-button type="button" mode="flat" @click="switchAuthMode">{{ switchModeButtonCaption }}</base-button>
   </form>
 </template>
 
 <script>
+import BaseButton from "@/components/ui/BaseButton";
 export default {
+  components: {BaseButton},
   emits: ['auth-form-data'],
   name: "VueAuthForm",
   data() {
@@ -153,13 +162,14 @@ export default {
           this.password.isValid = false;
           this.formIsValid = false;
         }
-      } else {
+      } else if(this.mode === 'login'){
         if (this.email.val === '') {
           this.email.isValid = false;
           this.formIsValid = false;
         }
-        if (this.password.val === '' || this.password.val.length < 8) {
-          this.password.isValid = false;
+      } else {
+        if (this.email.val === '') {
+          this.email.isValid = false;
           this.formIsValid = false;
         }
       }
@@ -181,11 +191,15 @@ export default {
           userType: this.userType.val,
           mode: this.mode
         };
-      } else {
+      } else if(this.mode === 'login'){
         formData = {
           email: this.email.val,
           password: this.password.val,
           mode: this.mode
+        }
+      } else {
+        formData = {
+          email: this.email.val
         }
       }
       this.$emit('auth-form-data', formData);
@@ -197,18 +211,25 @@ export default {
         this.mode = 'login';
       }
     },
+    resetPasswordMode() {
+      this.mode = 'reset';
+    },
   },
   computed: {
     submitButtonCaption() {
       if (this.mode === 'login') {
         return 'Zaloguj się';
-      } else {
+      } else if(this.mode === 'signup') {
         return 'Zarejestruj się';
+      } else {
+        return 'Resetuj'
       }
     },
     switchModeButtonCaption() {
       if (this.mode === 'login') {
         return 'Rejestracja';
+      } else if(this.mode === 'reset') {
+        return 'Wróć';
       } else {
         return 'Logowanie';
       }
@@ -298,9 +319,11 @@ label {
   color: white;
 }
 .form-signup-wrapper, .form-login-wrapper {
-  margin-bottom: 40px;
+  margin-bottom: 16px;
 }
-
+.form-reset-password-wrapper {
+  margin-bottom: 16px;
+}
 input[type='checkbox'] + label {
   font-weight: normal;
   display: inline;
@@ -356,5 +379,10 @@ h3 {
 }
 .invalid p {
   color: white;
+}
+.reset-password-link {
+  cursor: pointer;
+  margin: 0;
+  margin-bottom: 16px;
 }
 </style>

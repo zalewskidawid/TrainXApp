@@ -35,9 +35,12 @@ export default {
           await this.$store.dispatch('login', data);
           const redirectUrl = '/' + (this.$route.query.redirect || 'coaches');
           this.$router.replace(redirectUrl);
-        } else {
+        } else if(data.mode === 'signup') {
           await this.$store.dispatch('signup', data);
-          window.location.reload()
+          window.location.reload();
+        } else {
+          await this.$store.dispatch('resetPassword', data);
+          window.location.reload();
         }
       } catch (err) {
         this.isLoading = false;

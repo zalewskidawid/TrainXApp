@@ -7,7 +7,7 @@
       <div v-if="isLoading">
         <base-spinner></base-spinner>
       </div>
-    <user-profile-info v-for="user in userDataFromStore" :email="user.email" :key="user.id" :firstname="user.firstName" :lastname="user.lastName" :description="user.description" :user-type="user.userType" :rate="user.rate"></user-profile-info>
+    <user-profile-info v-else v-for="user in userDataFromStore" :email="user.email" :key="user.id" :firstname="user.firstName" :lastname="user.lastName" :description="user.description" :user-type="user.userType" :rate="user.rate"></user-profile-info>
     </base-card>
   </div>
 </template>

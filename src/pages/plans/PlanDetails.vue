@@ -10,13 +10,18 @@
         </div>
         <div class="plan-main-tab-wrapper">
           <div class="plan-description-container">
-            <h2 v-if="!isEditing">{{ selectedPlan.planTitle }}</h2>
-            <input v-else v-model="selectedPlan.planTitle" @blur="savePlanTitle"/>
-            <p class="error-msg" v-if="!planNameValid">Tytuł planu nie może być pusty, bądź zawierać cyfr.</p>
-            <h3 v-if="!isEditing">{{ selectedPlan.planDescription }}</h3>
-            <textarea v-else v-model="selectedPlan.planDescription" @blur="savePlanDescription"/>
-            <p class="error-msg" v-if="!planDescriptionValid">Opis planu nie może być pusty, bądź większy niż 256
-              znaków.</p>
+            <div class="plan-description-text-container">
+              <h2 v-if="!isEditing">{{ selectedPlan.planTitle }}</h2>
+              <input v-else v-model="selectedPlan.planTitle" @blur="savePlanTitle"/>
+              <p class="error-msg" v-if="!planNameValid">Tytuł planu nie może być pusty, bądź zawierać cyfr.</p>
+              <h3 v-if="!isEditing">{{ selectedPlan.planDescription }}</h3>
+              <textarea v-else v-model="selectedPlan.planDescription" @blur="savePlanDescription"/>
+              <p class="error-msg" v-if="!planDescriptionValid">Opis planu nie może być pusty, bądź większy niż 256
+                znaków.</p>
+            </div>
+            <div v-if="selectedPlan.planCreator !== undefined" class="plan-creator-container">
+              <p>Autor planu: {{selectedPlan.planCreator}}</p>
+            </div>
           </div>
           <div class="edit-plan-btn-container">
             <base-button v-if="isPlanCreator" class="edit-plan-btn" :class="{'active' : isEditing}" mode="outline"
@@ -113,6 +118,7 @@ export default {
         this.error = error.message || 'Coś poszło nie tak!';
       }
       this.selectedPlan = this.$store.getters['plans/plans'].find((plan) => plan.id === this.id);
+      console.log(this.selectedPlan.planCreator === undefined);
       if (this.selectedPlan.planCreator === this.$store.getters.userId || this.selectedPlan.planRecipient === this.$store.getters.userId) {
         this.isPlanCreator = true
       }if (typeof this.selectedPlan === 'undefined') {
