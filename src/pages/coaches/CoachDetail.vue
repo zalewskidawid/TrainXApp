@@ -20,13 +20,19 @@
     </section>
     <section v-if="!this.hasConversation">
       <base-card>
-        <router-view></router-view>
-        <header v-if="!checkRoutePath">
+        <header>
           <h2>Zainteresowany? Napisz do mnie!</h2>
-          <base-button link :to="contactLink">Kontakt</base-button>
+          <contact-coach :coach-email ="this.selectedCoach.email"></contact-coach>
         </header>
       </base-card>
     </section>
+      <section v-else>
+        <base-card>
+          <h4 class="conversation-text">
+            Masz już konwersację z tym trenerem. <a :href="requestUrl"><span>Przejdź do konwersacji</span></a>
+          </h4>
+        </base-card>
+      </section>
     </div>
   </div>
 </template>
@@ -34,16 +40,31 @@
 
 @import './src/assets/variables';
 @import './src/assets/formFields';
+
+.conversation-text {
+  a {
+    margin-top: 16px;
+    margin-left: 10px;
+  }
+}
+form {
+  padding: 0;
+  margin: 0;
+}
 </style>
 <script>
+import ContactCoach from "@/pages/requests/ContactCoach.vue";
+import BaseCard from "@/components/ui/BaseCard";
+
 export default {
+  components: {BaseCard, ContactCoach},
   props: ['id'],
   data() {
     return {
       selectedCoach: [],
-      hasConversation: true,
+      hasConversation: false,
       error: null,
-      isLoading: false
+      isLoading: false,
     };
   },
   methods: {
@@ -51,6 +72,11 @@ export default {
       this.isLoading = true;
       try {
         await this.$store.dispatch('coaches/LoadSpecificCoach');
+        await this.$store.dispatch('requests/checkConversation', {
+          trainerId: this.$route.params.id,
+          userId: this.$store.getters.userId
+        });
+        this.hasConversation = this.$store.getters['requests/hasConversation'];
         if (this.$store.getters['requests/requests'].length === 0) {
           await this.$store.dispatch('requests/fetchRequests');
         }
@@ -91,6 +117,15 @@ computed: {
     contactLink() {
       return this.$route.path + '/contact';
     },
+  getUserType() {
+    return this.$store.getters.userType;
+  },
+  requestUrl() {
+      const userId = this.$store.getters.userId;
+    const trainerId = this.$route.params.id;
+
+    return `/requests/${userId}${trainerId}`;
+  }
   },
    mounted() {
     this.getData();

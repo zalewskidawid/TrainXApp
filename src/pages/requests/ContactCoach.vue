@@ -17,6 +17,12 @@
 
 <script>
 export default {
+  props: {
+    coachEmail: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       email: '',
@@ -38,9 +44,10 @@ export default {
       this.$store.dispatch('requests/contactCoach', {
         email: this.email,
         message: this.message,
-        coachId: this.$route.params.id
+        coachId: this.$route.params.id,
+        coachEmail: this.coachEmail
       });
-      this.$router.replace('/coaches');
+      this.$router.replace('/requests');
     },
   },
 };
@@ -49,8 +56,8 @@ export default {
 <style scoped lang="scss">
 @import "src/assets/variables";
 form {
-  margin: 1rem;
-  padding: 1rem;
+  margin: 0;
+  padding: 0;
 }
 
 .form-control {

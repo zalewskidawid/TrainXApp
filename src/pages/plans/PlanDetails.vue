@@ -118,7 +118,6 @@ export default {
         this.error = error.message || 'Coś poszło nie tak!';
       }
       this.selectedPlan = this.$store.getters['plans/plans'].find((plan) => plan.id === this.id);
-      console.log(this.selectedPlan.planCreator === undefined);
       if (this.selectedPlan.planCreator === this.$store.getters.userId || this.selectedPlan.planRecipient === this.$store.getters.userId) {
         this.isPlanCreator = true
       }if (typeof this.selectedPlan === 'undefined') {

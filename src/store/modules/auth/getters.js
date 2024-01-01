@@ -9,7 +9,6 @@ export default {
     return state.userData
   },
   userType(state) {
-    console.log(state);
     return state.userType;
   },
   token(state) {

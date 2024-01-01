@@ -5,6 +5,7 @@ export default {
     state.didAutoLogout = false;
     state.email = payload.email;
     state.userData = payload.userData;
+    state.userType = payload.userType;
   },
   setAutoLogout(state) {
     state.didAutoLogout = true;

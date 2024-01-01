@@ -15,5 +15,8 @@ export default {
     const newIndex = (lastIndex + 1).toString();
     originalRequest[newIndex] = payload;
     state.requests[0].request = originalRequest;
+  },
+  setHasConversation(state, payload) {
+    state.hasConversation = payload;
   }
 };

@@ -1,7 +1,10 @@
 <template>
   <li>
-    <div>
+    <div v-if="getUserType === 'trainer'">
       <span>Od: </span><a :href="emailLink">{{ email }}</a>
+    </div>
+    <div v-else>
+      <span>Do: </span><a :href="emailLink">{{ coachEmail }}</a>
     </div>
     <p>{{ request }}</p>
     <base-button mode="flat" link :to="conversationLink">Wyświetl</base-button>
@@ -12,14 +15,17 @@
 import BaseButton from "@/components/ui/BaseButton";
 export default {
   components: {BaseButton},
-  props: ['email', 'request', 'id'],
+  props: ['email', 'request', 'id', 'coachEmail'],
   computed: {
     emailLink() {
-      return 'mailto:' + this.email;
+      return this.getUserType === 'trainer' ? 'mailto:' + this.email : 'mailto:' + this.coachEmail;
     },
     conversationLink() {
       return this.$route.path + '/' + this.id;
     },
+    getUserType() {
+      return this.$store.getters.userType;
+    }
   }
 }
 </script>

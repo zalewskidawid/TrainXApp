@@ -7,6 +7,7 @@ export default {
     const coachId = context.rootGetters.userId;
     const newRequest = {
       userEmail: payload.email,
+      coachEmail: payload.coachEmail,
       request: {
         0: {
           messageText: payload.message,
@@ -60,6 +61,7 @@ export default {
         userIdRecipient: responseData[key].userIdRecipient,
         userIdAddress: responseData[key].userIdAddress,
         userEmail: responseData[key].userEmail,
+        coachEmail: responseData[key].coachEmail,
         request: responseData[key].request,
         date: responseData[key].date,
         time: responseData[key].time
@@ -97,5 +99,17 @@ export default {
     }
 
     context.commit('addMessage', payload);
+  },
+  async checkConversation(context, payload) {
+    const response = await fetch(`https://trainx-app-default-rtdb.europe-west1.firebasedatabase.app/requests/${payload.userId + payload.trainerId}.json`);
+    const responseData = await response.json();
+    if (!response.ok) {
+      const error = new Error(
+          responseData.message || 'Nie udało się wysłać zapytania.'
+      );
+      throw error;
+    }
+    responseData === null ?  context.commit('setHasConversation', false) :  context.commit('setHasConversation', true)
   }
+
 };

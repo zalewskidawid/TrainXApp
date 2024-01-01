@@ -13,6 +13,7 @@
             <h2>Twoja konwersacja</h2>
           </section>
           <section>
+            <div ref="messageWrapper" class="message-wrapper">
             <div class="message-container" v-for="(message,index) in this.selectedConversation.request" :key="index"
                  :class="{
     'right': message.messageAuthor === this.$store.getters.userId,
@@ -24,6 +25,7 @@
                 <p class="message-time">{{message.time}}</p>
               </div>
               <p class="message-text">{{ message.messageText }}</p>
+            </div>
             </div>
             <form @submit.prevent="submitForm">
               <div class="form-control" :class="{invalid: !yourMessage.isValid}">
@@ -73,7 +75,16 @@ export default {
         this.formIsValid = false;
       }
     },
-    submitForm() {
+    scrollToBottom() {
+      this.$nextTick(() => {
+        const messageWrapper = this.$refs.messageWrapper;
+
+        if (messageWrapper) {
+          messageWrapper.scrollTop = messageWrapper.scrollHeight;
+        }
+      });
+    },
+    async submitForm() {
       this.validateForm();
 
       if (!this.formIsValid) {
@@ -91,9 +102,9 @@ export default {
         date: formattedDate,
         time: formattedTime
       };
-      this.$store.dispatch('requests/addMessage', formData);
-      console.log(this.$store.getters['requests/requests'])
+      await this.$store.dispatch('requests/addMessage', formData);
       this.yourMessage.val = '';
+      this.scrollToBottom();
     },
     async getConversationData() {
       this.isLoading = true;
@@ -101,7 +112,6 @@ export default {
         try {
           await this.$store.dispatch('requests/fetchRequests');
           this.selectedConversation = this.$store.getters['requests/requests'].find((request) => request.id === this.$route.params.id);
-          console.log(this.selectedConversation)
         } catch (error) {
           this.error = error.message || 'Coś poszło nie tak!';
         }
@@ -109,10 +119,15 @@ export default {
         this.selectedConversation = this.$store.getters['requests/requests'].find((request) => request.id === this.$route.params.id);
       }
       this.isLoading = false;
+      this.scrollToBottom();
+
     }
   },
   created() {
     this.getConversationData();
+  },
+  mounted() {
+    this.scrollToBottom();
   }
 }
 </script>
@@ -139,6 +154,13 @@ h2 {
   width: 100%;
   border-bottom: 2px solid white;
   padding: 8px;
+}
+.message-wrapper {
+  max-height: 400px; /* Set the maximum height */
+  overflow-y: auto; /* Add a vertical scrollbar when content overflows */
+}
+.message-container:last-of-type {
+  border-bottom: 0;
 }
 .message-container.right {
   display: flex;

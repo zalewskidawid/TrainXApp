@@ -28,9 +28,12 @@ const router = createRouter({
             props: true,
             children: [
                 {
-                    path: 'contact', component: ContactCoach, meta: {requiresAuth: true}
-                } // /coaches/c1/contact
-            ]
+                    path: 'contact',
+                    component: ContactCoach,
+                    meta: { requiresAuth: true },
+                    props: (route) => ({ coachEmail: route.params.email }),
+                },
+            ],
         },
         {
             path: '/requests',

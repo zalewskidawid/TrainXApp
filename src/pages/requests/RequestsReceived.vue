@@ -14,6 +14,7 @@
             v-for="req in receivedRequests"
             :key="req.id"
             :email="req.userEmail"
+            :coach-email="req.coachEmail"
             :request="Object.values(req.request)[0].messageText"
             :id="req.id"
           ></request-item>
@@ -47,7 +48,6 @@ export default {
   },
   created() {
     this.loadRequests();
-    console.log(this.$store.getters['requests/requests'])
   },
   methods: {
     async loadRequests() {

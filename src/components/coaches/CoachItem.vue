@@ -3,7 +3,7 @@
     <p>{{fullName}}</p>
     <p>{{rateDisplay}}</p>
     <div class="actions">
-      <base-button mode="outline" link :to="coachContactLink">Kontakt</base-button>
+      <base-button v-if="isTrainer !== 'trainer'" mode="outline" link :to="coachContactLink">Kontakt</base-button>
       <base-button link :to="coachDetailsLink">Szczegóły</base-button>
     </div>
   </li>
@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  props: ['firstName', 'lastName', 'rate', 'id'],
+  props: ['firstName', 'lastName', 'rate', 'id', 'isTrainer'],
   computed: {
     coachContactLink() {
       return this.$route.path + '/' + this.id + '/contact'; // /coaches/c1/contact
@@ -24,7 +24,7 @@ export default {
     },
     rateDisplay() {
       return this.rate + 'zł/h';
-    }
+    },
   },
 };
 </script>
