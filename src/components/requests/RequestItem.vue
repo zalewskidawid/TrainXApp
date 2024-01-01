@@ -1,24 +1,33 @@
 <template>
   <li>
     <div>
-      <a :href="emailLink">{{ email }}</a>
+      <span>Od: </span><a :href="emailLink">{{ email }}</a>
     </div>
-    <p>{{ message }}</p>
+    <p>{{ request }}</p>
+    <base-button mode="flat" link :to="conversationLink">Wyświetl</base-button>
   </li>
 </template>
 
 <script>
+import BaseButton from "@/components/ui/BaseButton";
 export default {
-  props: ['email', 'message'],
+  components: {BaseButton},
+  props: ['email', 'request', 'id'],
   computed: {
     emailLink() {
       return 'mailto:' + this.email;
-    }
+    },
+    conversationLink() {
+      return this.$route.path + '/' + this.id;
+    },
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import './src/assets/variables';
+@import './src/assets/formFields';
+
 li {
   margin: 1rem 0;
   border: 1px solid #ccc;
@@ -26,14 +35,24 @@ li {
 }
 
 a {
-  color: #3d008d;
+  color: white;
   text-decoration: none;
   font-weight: bold;
+  border: 0;
+  padding: 0;
 }
-
+a.flat {
+  border: 1px solid $primary-color;
+  padding: 0.75rem 1.5rem;
+  margin-top: 16px;
+  &:hover {
+    background: $primary-color-darker;
+    border-color: $primary-color-darker;
+  }
+}
 a:hover,
 a:active {
-  color: #8d007a;
+  background-color: transparent;
 }
 
 p {

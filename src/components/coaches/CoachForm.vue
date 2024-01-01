@@ -1,39 +1,39 @@
 <template>
   <form @submit.prevent="submitForm">
     <div class="form-control" :class="{invalid: !firstName.isValid}">
-      <label for="firstname">Firstname</label>
+      <label for="firstname">Imię</label>
       <input
         type="text"
         id="firstname"
         v-model.trim="firstName.val"
         @blur="clearValidity('firstName')"
       />
-      <p v-if="!firstName.isValid">Firstname must not be empty.</p>
+      <p v-if="!firstName.isValid">Imię nie może być puste.</p>
     </div>
     <div class="form-control" :class="{invalid: !lastName.isValid}">
-      <label for="lastname">Lastname</label>
+      <label for="lastname">Nazwisko</label>
       <input
         type="text"
         id="lastname"
         v-model.trim="lastName.val"
         @blur="clearValidity('lastName')"
       />
-      <p v-if="!lastName.isValid">Lastname must not be empty.</p>
+      <p v-if="!lastName.isValid">Nazwisko nie może być puste.</p>
     </div>
     <div class="form-control" :class="{invalid: !description.isValid}">
-      <label for="description">Description</label>
+      <label for="description">Opis</label>
       <textarea
         id="description"
         rows="5"
         v-model.trim="description.val"
         @blur="clearValidity('description')"
       ></textarea>
-      <p v-if="!description.isValid">Description must not be empty.</p>
+      <p v-if="!description.isValid">Opis nie może być pusty.</p>
     </div>
     <div class="form-control" :class="{invalid: !rate.isValid}">
-      <label for="rate">Hourly Rate</label>
+      <label for="rate">Stawka godzinowa</label>
       <input type="number" id="rate" v-model.number="rate.val" @blur="clearValidity('rate')" />
-      <p v-if="!rate.isValid">Rate must be greater than 0.</p>
+      <p v-if="!rate.isValid">Stawka musi być większa od zera.</p>
     </div>
     <div class="form-control" :class="{invalid: !areas.isValid}">
       <h3>Areas of Expertise</h3>

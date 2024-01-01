@@ -1,7 +1,7 @@
 <template>
   <div class="margin-top-page">
     <section>
-      <base-dialog :show="!!error" title="Coś poszło nie tak!" @close="handleError">
+      <base-dialog :show="!!error" :title="dialogHeader" @close="handleError">
         <p>{{ error }}</p>
       </base-dialog>
       <base-dialog :show="isLoading" title="Uwierzytelnianie..." fixed>
@@ -21,7 +21,8 @@ export default {
   data() {
     return {
       error: false,
-      isLoading: false
+      isLoading: false,
+      dialogHeader: ''
     }
   },
   components: {
@@ -40,10 +41,16 @@ export default {
           window.location.reload();
         } else {
           await this.$store.dispatch('resetPassword', data);
-          window.location.reload();
+          this.isLoading = false;
+          this.dialogHeader = 'Udało się';
+          this.error = 'Link do hasła został wysłany';
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
         }
       } catch (err) {
         this.isLoading = false;
+        this.dialogHeader = 'Coś poszło nie tak';
         this.error = err.message || 'Nie udało się uwierzytelnić. Spróbuj później.';
       }
     },

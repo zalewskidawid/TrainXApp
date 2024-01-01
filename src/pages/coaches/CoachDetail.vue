@@ -3,16 +3,22 @@
     <base-dialog :show="!!error" title="Coś poszło nie tak" @close="handleError">
       <p>{{ error }}</p>
     </base-dialog>
+    <div v-if="isLoading">
+    <base-spinner></base-spinner>
+    </div>
+    <div v-else>
     <section>
       <base-card>
-        <div v-if="isLoading">
-          <base-spinner></base-spinner>
-        </div>
         <h2>{{ fullName }}</h2>
         <h3>{{ rate }}zł/h</h3>
       </base-card>
     </section>
     <section>
+      <base-card>
+        <p>{{ description }}</p>
+      </base-card>
+    </section>
+    <section v-if="!this.hasConversation">
       <base-card>
         <router-view></router-view>
         <header v-if="!checkRoutePath">
@@ -21,20 +27,21 @@
         </header>
       </base-card>
     </section>
-    <section>
-      <base-card>
-        <p>{{ description }}</p>
-      </base-card>
-    </section>
+    </div>
   </div>
 </template>
+<style scoped lang="scss">
 
+@import './src/assets/variables';
+@import './src/assets/formFields';
+</style>
 <script>
 export default {
   props: ['id'],
   data() {
     return {
       selectedCoach: [],
+      hasConversation: true,
       error: null,
       isLoading: false
     };
@@ -44,6 +51,12 @@ export default {
       this.isLoading = true;
       try {
         await this.$store.dispatch('coaches/LoadSpecificCoach');
+        if (this.$store.getters['requests/requests'].length === 0) {
+          await this.$store.dispatch('requests/fetchRequests');
+        }
+        this.hasConversation = this.$store.getters['requests/requests']
+            .some(request => request.userIdAddress === this.$store.getters.userId &&
+                request.userIdRecipient === this.$route.params.id);
       } catch (error) {
         this.error = error.message || 'Coś poszło nie tak!';
       }

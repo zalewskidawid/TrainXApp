@@ -10,7 +10,7 @@
     </div>
     <p class="errors" v-if="!formIsValid">Wprowadź prawidłowy adres email i wprowadź wiadomośc.</p>
     <div class="actions">
-      <base-button>Wyślij wiadomość</base-button>
+      <base-button mode="flat">Wyślij wiadomość</base-button>
     </div>
   </form>
 </template>
@@ -40,7 +40,7 @@ export default {
         message: this.message,
         coachId: this.$route.params.id
       });
-      // this.$router.replace('/coaches');
+      this.$router.replace('/coaches');
     },
   },
 };

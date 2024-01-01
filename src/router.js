@@ -8,6 +8,7 @@ import PlansList from "@/pages/plans/PlansList";
 import createPlan from "@/pages/plans/CreatePlan";
 import PlanDetails from "@/pages/plans/PlanDetails";
 import HomePage from "@/pages/homePage/HomePage";
+import RequestDetail from "@/components/requests/RequestDetail";
 
 const CoachDetail = defineAsyncComponent(() => import('./pages/coaches/CoachDetail.vue'));
 const ContactCoach = defineAsyncComponent(() => import('./pages/requests/ContactCoach.vue'));
@@ -31,7 +32,18 @@ const router = createRouter({
                 } // /coaches/c1/contact
             ]
         },
-        {path: '/requests', component: RequestsReceived, meta: {requiresAuth: true}},
+        {
+            path: '/requests',
+            component: RequestsReceived,
+            meta: {requiresAuth: true},
+        },
+        {
+            path: '/requests/:id',
+            component: RequestDetail,
+            props: true,
+            meta: {requiresAuth: true}
+        },
+
         {path: '/auth', component: UserAuth, meta: {requiresUnauth: true}},
         {path: '/plans', component: PlansList},
         {path: '/plans/:id',component: PlanDetails, props: true},

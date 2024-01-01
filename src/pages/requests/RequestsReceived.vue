@@ -6,7 +6,7 @@
     <section>
       <base-card>
         <header>
-          <h2>Otrzymanie wiadomości</h2>
+          <h2>Twoje konwersacje</h2>
         </header>
         <base-spinner v-if="isLoading"></base-spinner>
         <ul v-else-if="hasRequests && !isLoading">
@@ -14,7 +14,8 @@
             v-for="req in receivedRequests"
             :key="req.id"
             :email="req.userEmail"
-            :message="req.message"
+            :request="Object.values(req.request)[0].messageText"
+            :id="req.id"
           ></request-item>
         </ul>
         <h3 v-else>Nie masz żadnych wiadomości!</h3>
@@ -46,6 +47,7 @@ export default {
   },
   created() {
     this.loadRequests();
+    console.log(this.$store.getters['requests/requests'])
   },
   methods: {
     async loadRequests() {

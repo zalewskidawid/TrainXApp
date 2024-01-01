@@ -13,7 +13,7 @@
         </section>
         <menu v-if="!fixed">
           <slot name="actions">
-            <base-button @click="tryClose">Close</base-button>
+            <base-button  class="flat" type="button" @click="tryClose">Close</base-button>
           </slot>
         </menu>
       </dialog>
@@ -52,6 +52,7 @@ export default {
 
 <style scoped lang="scss">
 @import "@/assets/variables.scss";
+@import "@/assets/formFields.scss";
 .backdrop {
   position: fixed;
   top: 0;
