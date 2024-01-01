@@ -10,7 +10,7 @@
 + Firebase: Firebase is used as the backend infrastructure and database for TrainXApp. It provides real-time data synchronization, secure authentication, and scalable storage capabilities.
 ## Key Features
 + Internal Chat: TrainXApp offers an internal chat system that allows users to communicate with their personal trainers. The chat conversations are saved in the database, ensuring the continuity of communication and easy reference to previous discussions.
-+ Training and Diet Plans: Users can create and manage their training and diet plans within TrainXApp. They can input their goals, preferences, and constraints, and the application generates personalized plans tailored to their needs.
-+ Plan Customization: TrainXApp provides flexibility for users to modify their training and diet plans based on their progress or changing requirements. They can easily make adjustments and track the updates in real-time.
++ Training Plans: Users can create and manage their training plans within TrainXApp.
++ Plan Customization: TrainXApp provides flexibility for users to modify their training plans based on their progress or changing requirements. They can easily make adjustments and track the updates in real-time.
 + Collaboration with Personal Trainers: TrainXApp enables users to establish a collaborative relationship with personal trainers. Users can seek guidance, receive feedback, and gain valuable insights from their trainers, fostering a supportive and motivating environment.
 + User Account Creation: TrainXApp allows users to create their accounts, providing a personalized experience and secure access to their data. Account creation involves a registration process, ensuring the authenticity and integrity of user profiles.
