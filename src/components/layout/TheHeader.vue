@@ -1,5 +1,5 @@
 <template>
-  <header :class="{ 'scrolled': isScrolled, 'menu-active': isMenuActive }" >
+  <header :class="{ 'scrolled': isScrolled, 'menu-active': isMenuActive }" ref="header" >
     <nav>
       <h2 class="header-home">
         <router-link class="menu-logo" to="/">Train<span>X</span>App</router-link>
@@ -12,7 +12,7 @@
           <router-link class="menu-item" to="/plans">Plany</router-link>
         </li>
         <li v-if="isLoggedIn">
-          <router-link class="menu-item" to="/requests">Wiadomości</router-link>
+          <router-link class="menu-item" :class="{ newmessage: isNewMessage }" to="/requests">Wiadomości</router-link>
         </li>
         <li v-if="isLoggedIn">
           <router-link class="menu-item" to="/myProfile">Mój profil</router-link>
@@ -58,12 +58,29 @@ export default {
   data() {
     return {
       isScrolled: false,
-      isMenuActive: false
+      isMenuActive: false,
+      isComponentReady: false
+
     }
   },
   computed: {
     isLoggedIn() {
       return this.$store.getters.isAuthenticated;
+    },
+    isNewMessage() {
+      const requests = this.$store.getters['requests/requests'];
+      const hasMessageWithTrueStatus = requests.some(request => request.messageStatus === true);
+
+      if (hasMessageWithTrueStatus) {
+        const lastRequest = requests.find(request => request.messageStatus === true);
+        if (lastRequest && lastRequest.request) {
+          const keys = Object.keys(lastRequest.request);
+          const lastMessageKey = keys[keys.length - 1];
+          const lastMessage = lastRequest.request[lastMessageKey];
+          return lastMessage && lastMessage.messageAuthor !== this.$store.getters.userId;
+        }
+      }
+      return false;
     }
   },
   methods: {
@@ -85,6 +102,16 @@ export default {
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
   },
+  async created() {
+    if (this.$store.getters['requests/requests'].length === 0) {
+      try {
+        await this.$store.dispatch('requests/fetchRequests');
+      } catch (error) {
+        console.error('Błąd podczas pobierania danych z serwera:', error);
+      }
+    }
+    this.isComponentReady = true;
+  }
 }
 </script>
 
@@ -110,7 +137,20 @@ header.scrolled {
   background-color: rgba(0,0,0,0.6);
   height: 72px;
 }
-
+header .newmessage {
+  position: relative;
+  &:after {
+    content:'';
+    position: absolute;
+    right: 0;
+    top: -5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border:1px solid black;
+    background-color: red;
+  }
+}
 header a.menu-item, button {
   text-decoration: none;
   color: white;
@@ -278,4 +318,5 @@ header.menu-active .menu-hamburger {
     opacity: 0;
   }
 }
+
 </style>

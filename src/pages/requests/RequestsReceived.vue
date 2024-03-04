@@ -15,8 +15,10 @@
             :key="req.id"
             :email="req.userEmail"
             :coach-email="req.coachEmail"
-            :request="Object.values(req.request)[0].messageText"
+            :request="Object.values(req.request)[Object.values(req.request).length - 1].messageText"
             :id="req.id"
+            :new-message="req.messageStatus"
+            :message-author="Object.values(req.request)[Object.values(req.request).length - 1].messageAuthor"
           ></request-item>
         </ul>
         <h3 v-else>Nie masz żadnych wiadomości!</h3>
@@ -46,8 +48,8 @@ export default {
       return this.$store.getters['requests/hasRequests'];
     },
   },
-  created() {
-    this.loadRequests();
+  async created() {
+    await this.loadRequests();
   },
   methods: {
     async loadRequests() {

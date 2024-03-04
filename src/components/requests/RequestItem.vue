@@ -1,12 +1,13 @@
 <template>
-  <li>
+  <li :class="{newMessage: newMessage && !compareUserRecipient }">
     <div v-if="getUserType === 'trainer'">
       <span>Od: </span><a :href="emailLink">{{ email }}</a>
     </div>
     <div v-else>
       <span>Do: </span><a :href="emailLink">{{ coachEmail }}</a>
     </div>
-    <p>{{ request }}</p>
+    <p v-if="newMessage && !compareUserRecipient" class="new-message-text">Nowa wiadomość !!!: <span>{{ request }}</span></p>
+    <p v-else>{{ request }}</p>
     <base-button mode="flat" link :to="conversationLink">Wyświetl</base-button>
   </li>
 </template>
@@ -15,7 +16,7 @@
 import BaseButton from "@/components/ui/BaseButton";
 export default {
   components: {BaseButton},
-  props: ['email', 'request', 'id', 'coachEmail'],
+  props: ['email', 'request', 'id', 'coachEmail', 'newMessage', 'messageAuthor'],
   computed: {
     emailLink() {
       return this.getUserType === 'trainer' ? 'mailto:' + this.email : 'mailto:' + this.coachEmail;
@@ -25,7 +26,13 @@ export default {
     },
     getUserType() {
       return this.$store.getters.userType;
+    },
+    compareUserRecipient() {
+      return this.messageAuthor === this.$store.getters['userId']
     }
+  },
+  created() {
+
   }
 }
 </script>
@@ -63,5 +70,25 @@ a:active {
 
 p {
   margin: 0.5rem 0 0 0;
+}
+.newMessage {
+  border: 2px solid #ccc;
+  position: relative;
+  &:after {
+    content:'';
+    position: absolute;
+    right: -5px;
+    top: -10px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border:1px solid black;
+    background-color: red;
+  }
+}
+.new-message-text {
+  span {
+    font-weight: bold;
+  }
 }
 </style>

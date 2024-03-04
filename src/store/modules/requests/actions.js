@@ -8,6 +8,7 @@ export default {
     const newRequest = {
       userEmail: payload.email,
       coachEmail: payload.coachEmail,
+      messageStatus: true,
       request: {
         0: {
           messageText: payload.message,
@@ -64,7 +65,8 @@ export default {
         coachEmail: responseData[key].coachEmail,
         request: responseData[key].request,
         date: responseData[key].date,
-        time: responseData[key].time
+        time: responseData[key].time,
+        messageStatus: responseData[key].messageStatus
       };
       if(coachId === request.userIdAddress || coachId === request.userIdRecipient) {
         requests.push(request);
@@ -72,6 +74,21 @@ export default {
     }
 
     context.commit('setRequests', requests);
+  },
+  async changeMessageStatus(context, payload) {
+    const response = await fetch(`https://trainx-app-default-rtdb.europe-west1.firebasedatabase.app/requests/${payload.conversationId}.json`, {
+      method: 'PATCH',
+      body: JSON.stringify({ messageStatus: payload.messageStatus})
+    })
+    const responseData = await response.json();
+
+    if (!response.ok) {
+      const error = new Error(
+          responseData.message || 'Nie udało się wysłać zapytania.'
+      );
+      throw error;
+    }
+    context.commit('changeMessageStatus', payload)
   },
   async addMessage(context, payload) {
     const existingObjectsResponse = await fetch(`https://trainx-app-default-rtdb.europe-west1.firebasedatabase.app/requests/${payload.conversationId}/request.json`);
@@ -83,7 +100,6 @@ export default {
       const existingIndexes = Object.keys(existingObjectsData).map(index => parseInt(index, 10));
       newIndex = Math.max(...existingIndexes) + 1;
     }
-
     const response = await fetch(`https://trainx-app-default-rtdb.europe-west1.firebasedatabase.app/requests/${payload.conversationId}/request/${newIndex}.json`, {
       method: 'PUT',
       body: JSON.stringify(payload)
@@ -97,8 +113,8 @@ export default {
       );
       throw error;
     }
-
     context.commit('addMessage', payload);
+    context.dispatch('changeMessageStatus', {conversationId: payload.conversationId, messageStatus: true });
   },
   async checkConversation(context, payload) {
     const response = await fetch(`https://trainx-app-default-rtdb.europe-west1.firebasedatabase.app/requests/${payload.userId + payload.trainerId}.json`);

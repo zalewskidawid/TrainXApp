@@ -123,8 +123,25 @@ export default {
 
     }
   },
-  created() {
-    this.getConversationData();
+  async created() {
+    await this.getConversationData();
+    const requests = this.$store.getters['requests/requests'];
+    const lastRequest = requests[requests.length - 1];
+
+    if (lastRequest && lastRequest.request) {
+      const keys = Object.keys(lastRequest.request);
+      const lastMessageKey = keys[keys.length - 1];
+      const lastMessage = lastRequest.request[lastMessageKey];
+
+      if (lastMessage && lastMessage.messageAuthor !== this.$store.getters.userId) {
+        try {
+          await this.$store.dispatch('requests/changeMessageStatus', { conversationId: this.$route.params.id, messageStatus: false });
+        } catch (error) {
+          console.error('Błąd podczas zmiany statusu wiadomości:', error);
+        }
+      }
+    }
+    console.log(this.$store.getters['requests/requests']);
   },
   mounted() {
     this.scrollToBottom();

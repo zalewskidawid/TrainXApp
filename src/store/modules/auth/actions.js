@@ -5,6 +5,7 @@ export default {
             ...payload,
             mode: 'login'
         });
+
     },
     async signup(context, payload) {
         return context.dispatch('authSignUp', {
@@ -143,6 +144,7 @@ export default {
             userData: responseData.displayName,
             userType: userType
         });
+        context.dispatch('requests/fetchRequests')
     },
     tryLogin(context) {
         const token = localStorage.getItem('token');
@@ -170,6 +172,7 @@ export default {
                 userType: userType
             });
         }
+        context.dispatch('requests/fetchRequests')
     },
      logout(context) {
         localStorage.removeItem('token');
