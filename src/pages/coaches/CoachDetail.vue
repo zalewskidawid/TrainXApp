@@ -18,7 +18,7 @@
         <p>{{ description }}</p>
       </base-card>
     </section>
-    <section v-if="!this.hasConversation">
+    <section v-if="!this.hasConversation && getUserType !== 'trainer'">
       <base-card>
         <header>
           <h2>Zainteresowany? Napisz do mnie!</h2>
@@ -26,10 +26,17 @@
         </header>
       </base-card>
     </section>
-      <section v-else>
+      <section v-else-if="this.hasConversation && getUserType !== 'trainer'">
         <base-card>
           <h4 class="conversation-text">
             Masz już konwersację z tym trenerem. <a :href="requestUrl"><span>Przejdź do konwersacji</span></a>
+          </h4>
+        </base-card>
+      </section>
+      <section v-else>
+        <base-card>
+          <h4 class="conversation-text">
+           Jako trener nie możesz kontaktować się z trenerami.
           </h4>
         </base-card>
       </section>
