@@ -262,7 +262,7 @@ header .menu-mobile {
       a.menu-item:hover,
       a.menu-item.router-link-active,
       button:hover,
-      button:active, {
+      button:active {
         color: $primary-color;
       }
     }
