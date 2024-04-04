@@ -1,10 +1,6 @@
 <template>
   <form @submit.prevent="submitForm">
     <div class="form-control">
-      <label for="email">Twój E-mail</label>
-      <input type="email" id="email" v-model.trim="email" />
-    </div>
-    <div class="form-control">
       <label for="message">Wiadomość</label>
       <textarea rows="5" id="message" v-model.trim="message"></textarea>
     </div>
@@ -22,10 +18,17 @@ export default {
       type: String,
       required: true,
     },
+    coachFirstName: {
+      type: String,
+      required: true
+    },
+    coachLastName: {
+      type: String,
+      required: true
+    },
   },
   data() {
     return {
-      email: '',
       message: '',
       formIsValid: true,
     };
@@ -34,18 +37,18 @@ export default {
     submitForm() {
       this.formIsValid = true;
       if (
-        this.email === '' ||
-        !this.email.includes('@') ||
         this.message === ''
       ) {
         this.formIsValid = false;
         return;
       }
       this.$store.dispatch('requests/contactCoach', {
-        email: this.email,
+        email: this.$store.getters.userEmail,
         message: this.message,
         coachId: this.$route.params.id,
-        coachEmail: this.coachEmail
+        coachEmail: this.coachEmail,
+        coachData: this.coachFirstName + ' ' + this.coachLastName,
+        userData: this.$store.getters.userData
       });
       this.$router.replace('/requests');
     },

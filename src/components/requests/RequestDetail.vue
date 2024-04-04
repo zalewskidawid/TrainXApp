@@ -10,7 +10,8 @@
       <section>
         <base-card>
           <section>
-            <h2>Twoja konwersacja</h2>
+            <h2 v-if="isClientLoggedIn">Twoja konwersacja z {{this.selectedConversation.coachData}}</h2>
+            <h2 v-else>Twoja konwersacja z {{this.selectedConversation.userData}}</h2>
           </section>
           <section>
             <div ref="messageWrapper" class="message-wrapper">
@@ -20,7 +21,7 @@
     'left': message.messageAuthor !== this.$store.getters.userId
   }">
               <div class="date-container">
-                <span class="message-email">{{ message.messageAuthorEmail }}</span>
+                <span class="message-email">{{ message.messageAuthorData }}</span>
                 <p class="message-date">{{message.date}}</p>
                 <p class="message-time">{{message.time}}</p>
               </div>
@@ -54,6 +55,7 @@ export default {
   components: {BaseCard},
   data() {
     return {
+      request: null,
       isLoading: false,
       error: null,
       selectedConversation: [],
@@ -62,6 +64,11 @@ export default {
         isValid: true,
       },
 
+    }
+  },
+  computed: {
+    isClientLoggedIn() {
+      return this.$store.getters.userId === this.selectedConversation.userIdAddress;
     }
   },
   methods: {
@@ -85,6 +92,7 @@ export default {
       });
     },
     async submitForm() {
+      console.log(this.$store.getters.userData)
       this.validateForm();
 
       if (!this.formIsValid) {
@@ -96,7 +104,7 @@ export default {
 
       const formData = {
         messageText: this.yourMessage.val,
-        messageAuthorEmail: this.$store.getters.userEmail,
+        messageAuthorData: this.$store.getters.userData,
         messageAuthor: this.$store.getters.userId,
         conversationId: this.$route.params.id,
         date: formattedDate,
@@ -141,7 +149,7 @@ export default {
         }
       }
     }
-    console.log(this.$store.getters['requests/requests']);
+    console.log(this.isUserIdInUrl)
   },
   mounted() {
     this.scrollToBottom();

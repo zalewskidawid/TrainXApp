@@ -8,12 +8,14 @@ export default {
     const newRequest = {
       userEmail: payload.email,
       coachEmail: payload.coachEmail,
+      userData: payload.userData,
+      coachData: payload.coachData,
       messageStatus: true,
       request: {
         0: {
           messageText: payload.message,
           messageAuthor: coachId,
-          messageAuthorEmail: payload.email,
+          messageAuthorData: payload.userData,
           date: formattedDate,
           time: formattedTime
         }
@@ -63,6 +65,8 @@ export default {
         userIdAddress: responseData[key].userIdAddress,
         userEmail: responseData[key].userEmail,
         coachEmail: responseData[key].coachEmail,
+        userData: responseData[key].userData,
+        coachData: responseData[key].coachData,
         request: responseData[key].request,
         date: responseData[key].date,
         time: responseData[key].time,

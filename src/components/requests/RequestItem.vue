@@ -1,10 +1,10 @@
 <template>
   <li :class="{newMessage: newMessage && !compareUserRecipient }">
     <div v-if="getUserType === 'trainer'">
-      <span>Od: </span><a :href="emailLink">{{ email }}</a>
+      <span>Konwersacja z: </span><p class="user-data">{{ userData }}</p>
     </div>
     <div v-else>
-      <span>Do: </span><a :href="emailLink">{{ coachEmail }}</a>
+      <span>Konwersacja z: </span><p class="user-data">{{ coachData }}</p>
     </div>
     <p v-if="newMessage && !compareUserRecipient" class="new-message-text">Nowa wiadomość !!!: <span>{{ request }}</span></p>
     <p v-else>{{ request }}</p>
@@ -16,7 +16,7 @@
 import BaseButton from "@/components/ui/BaseButton";
 export default {
   components: {BaseButton},
-  props: ['email', 'request', 'id', 'coachEmail', 'newMessage', 'messageAuthor'],
+  props: ['email', 'request', 'id', 'coachData', 'userData', 'newMessage', 'messageAuthor'],
   computed: {
     emailLink() {
       return this.getUserType === 'trainer' ? 'mailto:' + this.email : 'mailto:' + this.coachEmail;
@@ -32,7 +32,7 @@ export default {
     }
   },
   created() {
-
+    console.log(this.userData)
   }
 }
 </script>
@@ -70,6 +70,10 @@ a:active {
 
 p {
   margin: 0.5rem 0 0 0;
+}
+.user-data {
+  display: inline;
+  font-weight: bold;
 }
 .newMessage {
   border: 2px solid #ccc;

@@ -94,7 +94,8 @@ export default {
             body: JSON.stringify({
                 email: payload.email,
                 password: payload.password,
-                returnSecureToken: true
+                returnSecureToken: true,
+                displayName: `${payload.first} ${payload.last}`
             })
         });
         const responseData = await response.json();
@@ -120,7 +121,7 @@ export default {
             userType = responseData.userType;
         }
         await getUserType();
-
+        console.log(responseData)
 
         const expiresIn = +responseData.expiresIn * 1000;
         // const expiresIn = 5000;

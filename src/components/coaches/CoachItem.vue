@@ -3,8 +3,8 @@
     <p>{{fullName}}</p>
     <p>{{rateDisplay}}</p>
     <div class="actions">
-      <base-button v-if="isTrainer !== 'trainer'" mode="outline" link :to="coachContactLink">Kontakt</base-button>
-      <base-button link :to="coachDetailsLink">Szczegóły</base-button>
+      <base-button v-if="isTrainer !== 'trainer' && isLoggedIn" mode="outline" link :to="coachDetailsLink">Kontakt</base-button>
+      <base-button v-else link :to="coachDetailsLink">Szczegóły</base-button>
     </div>
   </li>
 </template>
@@ -25,6 +25,9 @@ export default {
     rateDisplay() {
       return this.rate + 'zł/h';
     },
+    isLoggedIn() {
+      return this.$store.getters.userType !== ""
+    }
   },
 };
 </script>

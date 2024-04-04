@@ -77,8 +77,10 @@
       </div>
     </div>
     <p v-if="mode !== 'reset'" class="reset-password-link" @click="resetPasswordMode">Nie pamiętasz hasła?</p>
-    <base-button mode="flat">{{ submitButtonCaption }}</base-button>
-    <base-button type="button" mode="flat" @click="switchAuthMode">{{ switchModeButtonCaption }}</base-button>
+    <div class="btn-container">
+      <base-button mode="flat">{{ submitButtonCaption }}</base-button>
+      <base-button class="register" type="button" mode="flat" @click="switchAuthMode">{{ switchModeButtonCaption }}</base-button>
+    </div>
   </form>
 </template>
 
@@ -385,4 +387,14 @@ h3 {
   margin: 0;
   margin-bottom: 16px;
 }
+.btn-container {
+  display: flex;
+  @media(max-width: 400px) {
+    flex-direction: column;
+    .register {
+        margin-top: 16px;
+  }
+  }
+}
+
 </style>

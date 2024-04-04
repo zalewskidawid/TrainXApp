@@ -160,6 +160,7 @@ header a.menu-item, button {
   text-transform: uppercase;
   font-weight: bold;
   border-radius: 25px;
+  text-align: center;
   &:hover {
     color: white;
     background-color: $primary-color-darker

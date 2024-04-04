@@ -18,28 +18,30 @@
         <p>{{ description }}</p>
       </base-card>
     </section>
-    <section v-if="!this.hasConversation && getUserType !== 'trainer'">
-      <base-card>
-        <header>
-          <h2>Zainteresowany? Napisz do mnie!</h2>
-          <contact-coach :coach-email ="this.selectedCoach.email"></contact-coach>
-        </header>
-      </base-card>
-    </section>
-      <section v-else-if="this.hasConversation && getUserType !== 'trainer'">
+    <div v-if="isLoggedIn">
+      <section v-if="!this.hasConversation && getUserType !== 'trainer'">
         <base-card>
-          <h4 class="conversation-text">
-            Masz już konwersację z tym trenerem. <a :href="requestUrl"><span>Przejdź do konwersacji</span></a>
-          </h4>
+          <header>
+            <h2>Zainteresowany? Napisz do mnie!</h2>
+            <contact-coach :coach-email ="this.selectedCoach.email" :coach-first-name="this.selectedCoach.firstName" :coach-last-name="this.selectedCoach.lastName"></contact-coach>
+          </header>
         </base-card>
       </section>
-      <section v-else>
-        <base-card>
-          <h4 class="conversation-text">
-           Jako trener nie możesz kontaktować się z trenerami.
-          </h4>
-        </base-card>
-      </section>
+        <section v-else-if="this.hasConversation && getUserType !== 'trainer'">
+          <base-card>
+            <h4 class="conversation-text">
+              Masz już konwersację z tym trenerem. <a :href="requestUrl"><span>Przejdź do konwersacji</span></a>
+            </h4>
+          </base-card>
+        </section>
+        <section v-else>
+          <base-card>
+            <h4 class="conversation-text">
+             Jako trener nie możesz kontaktować się z trenerami.
+            </h4>
+          </base-card>
+        </section>
+    </div>
     </div>
   </div>
 </template>
@@ -123,6 +125,9 @@ computed: {
     },
     contactLink() {
       return this.$route.path + '/contact';
+    },
+    isLoggedIn() {
+      return this.$store.getters.userType !== ""
     },
   getUserType() {
     return this.$store.getters.userType;

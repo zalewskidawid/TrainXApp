@@ -30,8 +30,12 @@ const router = createRouter({
                 {
                     path: 'contact',
                     component: ContactCoach,
-                    meta: { requiresAuth: true },
-                    props: (route) => ({ coachEmail: route.params.email }),
+                    meta: {requiresAuth: true},
+                    props: (route) => ({
+                        coachEmail: route.params.email,
+                        coachFirstName: route.params.firstName,
+                        coachLastName: route.params.lastName
+                    }),
                 },
             ],
         },
@@ -39,6 +43,7 @@ const router = createRouter({
             path: '/requests',
             component: RequestsReceived,
             meta: {requiresAuth: true},
+            props: true
         },
         {
             path: '/requests/:id',
@@ -49,7 +54,7 @@ const router = createRouter({
 
         {path: '/auth', component: UserAuth, meta: {requiresUnauth: true}},
         {path: '/plans', component: PlansList},
-        {path: '/plans/:id',component: PlanDetails, props: true},
+        {path: '/plans/:id', component: PlanDetails, props: true},
         {path: '/plans/createPlan', component: createPlan, meta: {requiresAuth: true}},
         {path: '/myProfile', component: userProfile, meta: {requiresAuth: true}},
         {path: '/:notFound(.*)', component: NotFound}
